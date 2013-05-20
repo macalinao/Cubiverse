@@ -1,0 +1,8 @@
+main: me.thehutch.cubiverse.CubiversePlugin
+name: Cubiverse
+version: 1.0.0
+author: thehutch
+description: Inter-Planetry RPG
+
+load: startup
+platform: ALL
