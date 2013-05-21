@@ -29,20 +29,17 @@ public class CubiverseInputExecutor implements InputExecutor {
 		float speed = 50;
 		if (inputState.getForward()) {
 			offset = offset.subtract(ts.forwardVector().multiply(speed).multiply(dt));
-		}
-		if (inputState.getBackward()) {
+		} else if (inputState.getBackward()) {
 			offset = offset.add(ts.forwardVector().multiply(speed).multiply(dt));
 		}
 		if (inputState.getLeft()) {
 			offset = offset.subtract(ts.rightVector().multiply(speed).multiply(dt));
-		}
-		if (inputState.getRight()) {
+		} else if (inputState.getRight()) {
 			offset = offset.add(ts.rightVector().multiply(speed).multiply(dt));
 		}
 		if (inputState.getJump()) {
 			offset = offset.add(ts.upVector().multiply(speed).multiply(dt));
-		}
-		if (inputState.getCrouch()) {
+		} else if (inputState.getCrouch()) {
 			offset = offset.subtract(ts.upVector().multiply(speed).multiply(dt));
 		}
 
