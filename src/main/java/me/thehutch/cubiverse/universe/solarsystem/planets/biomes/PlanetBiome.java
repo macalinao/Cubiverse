@@ -1,4 +1,4 @@
-package me.thehutch.cubiverse.universe.planets.biomes;
+package me.thehutch.cubiverse.universe.solarsystem.planets.biomes;
 
 import org.spout.api.generator.biome.Biome;
 /**

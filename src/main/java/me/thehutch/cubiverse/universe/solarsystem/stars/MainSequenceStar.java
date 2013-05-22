@@ -6,7 +6,14 @@ import me.thehutch.cubiverse.universe.solarsystem.Star;
  */
 public class MainSequenceStar extends Star {
 
+	//TODO change these values
+	private static final long LIFESPAN = 123456789;
+	private static final double MASS = 1337000.0;
+	private static final double RADIUS = 128;
+
 	public MainSequenceStar(String name) {
-		super(name, 1337000, 128, 5000000000L);
+		super(name, MASS, RADIUS, LIFESPAN);
 	}
+
+	
 }

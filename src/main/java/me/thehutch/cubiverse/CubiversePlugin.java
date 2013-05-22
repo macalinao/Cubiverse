@@ -1,11 +1,11 @@
 package me.thehutch.cubiverse;
 
 import me.thehutch.cubiverse.universe.Universe;
+import me.thehutch.cubiverse.universe.solarsystem.SolarSystem;
 import org.spout.api.chat.ChatArguments;
 import org.spout.api.chat.style.ChatStyle;
 import org.spout.api.component.impl.ObserverComponent;
 import org.spout.api.entity.Entity;
-import org.spout.api.generator.FlatWorldGenerator;
 import org.spout.api.geo.LoadOption;
 import org.spout.api.geo.World;
 import org.spout.api.geo.discrete.Point;
@@ -46,8 +46,18 @@ public class CubiversePlugin extends CommonPlugin {
 			default:
 				break;
 		}
+		this.universe = new Universe();
+		this.universe.createNewSolarSystem("HelloCubiverse");
 
-		
+		/*
+		World world = system.getWorld();
+		Point spawn = world.getSpawnPoint().getPosition();
+		final int cx = spawn.getChunkX();
+		final int cz = spawn.getChunkZ();
+
+		Entity e = world.createAndSpawnEntity(spawn, LoadOption.LOAD_GEN, ObserverComponent.class);
+		e.setObserver(new FlatIterator(cx, 0, cz, 16, 3));
+		world.setSpawnPoint(new Transform(new Point(world, 0, 0, 0), Quaternion.IDENTITY, Vector3.ONE));*/
 
 		getLogger().info("enabled");
 	}
@@ -59,6 +69,7 @@ public class CubiversePlugin extends CommonPlugin {
 	}
 
 	private void setupUniverse() {
+		/*
 		World world = getEngine().loadWorld("default", new FlatWorldGenerator());
 
 		final int radius = 3;
@@ -72,10 +83,7 @@ public class CubiversePlugin extends CommonPlugin {
 		e.setObserver(new FlatIterator(cx, 0, cz, 16, radius));
 		if (newWorld) {
 			world.setSpawnPoint(new Transform(new Point(world, 0, 0, 0), Quaternion.IDENTITY, Vector3.ONE));
-		}
-
-		this.universe = new Universe(world);
-		
+		}*/
 	}
 
 	public static CubiversePlugin getInstance() {
