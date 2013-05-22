@@ -1,6 +1,5 @@
 package me.thehutch.cubiverse.universe;
 
-import me.thehutch.cubiverse.data.CubiverseData;
 import me.thehutch.cubiverse.data.Storable;
 import org.spout.api.component.impl.DatatableComponent;
 /**
@@ -9,9 +8,10 @@ import org.spout.api.component.impl.DatatableComponent;
 public abstract class CelestialObject implements Storable {
 
 	private final String name;
-	private double mass, radius;
+	private double mass;
+	private int radius;
 
-	public CelestialObject(String name, double mass, double radius) {
+	public CelestialObject(String name, double mass, int radius) {
 		this.name = name;
 		this.mass = mass;
 		this.radius = radius;
@@ -29,11 +29,11 @@ public abstract class CelestialObject implements Storable {
 		this.mass = mass;
 	}
 
-	public double getRadius() {
+	public int getRadius() {
 		return radius;
 	}
 
-	public void setRadius(double radius) {
+	public void setRadius(int radius) {
 		this.radius = radius;
 	}
 

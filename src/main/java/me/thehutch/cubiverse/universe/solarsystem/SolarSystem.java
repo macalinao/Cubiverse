@@ -33,12 +33,10 @@ public class SolarSystem {
 		this.size = size;
 		this.numOfPlanets = numOfPlanets;
 		this.star = star;
-		this.planets = new THashMap<>(numOfPlanets);
+		this.planets = new THashMap<>();
 
 		//Load planets
-		for(int i=0 ; i<planets.size() ; i++) {
-			planets.put(new Point(world, 64, 0, 0), new Planet("Test_Planet[" + i + "]", 500, 2, null));
-		}
+		planets.put(new Point(world, 0, 0, 0), new Planet("Test_Planet", 500, 2));
 	}
 
 	public World getWorld() {
@@ -79,7 +77,7 @@ public class SolarSystem {
 		return planets.keySet();
 	}
 
-	public Collection<Planet> getPlanets() {
-		return planets.values();
+	public THashMap<Point, Planet> getPlanets() {
+		return planets;
 	}
 }

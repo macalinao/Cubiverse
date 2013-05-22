@@ -9,6 +9,7 @@ import org.spout.api.entity.Player;
 import org.spout.api.event.EventHandler;
 import org.spout.api.event.Listener;
 import org.spout.api.event.engine.EngineStartEvent;
+import org.spout.api.geo.discrete.Point;
 /**
  * @author thehutch
  */
@@ -26,6 +27,7 @@ public class CubiverseListener implements Listener {
 			return;
 		}
 		Player player = ((Client) plugin.getEngine()).getActivePlayer();
+		//player.teleport(new Point(player.getWorld(), 0, 0, 0));
 
 		player.add(CameraComponent.class);
 		player.add(InteractComponent.class);

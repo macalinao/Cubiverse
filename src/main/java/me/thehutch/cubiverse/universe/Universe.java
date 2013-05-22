@@ -2,8 +2,8 @@ package me.thehutch.cubiverse.universe;
 
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
-import java.util.logging.Level;
 import me.thehutch.cubiverse.universe.solarsystem.SolarSystem;
+import me.thehutch.cubiverse.universe.solarsystem.planets.Planet;
 import org.spout.api.Spout;
 import org.spout.api.generator.EmptyWorldGenerator;
 import org.spout.api.geo.LoadOption;
@@ -15,7 +15,6 @@ import org.spout.api.material.BlockMaterial;
 import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
 import org.spout.api.util.cuboid.procedure.CuboidBlockMaterialProcedure;
 
-
 /**
  * @author thehutch
  */
@@ -23,10 +22,9 @@ public class Universe {
 
 	//Universal Gravitational Constant
 	public static final float GRAV_CONST = 0.05f;
-
 	//Worlds
 	private final THashMap<String, SolarSystem> solarSystems;
-	
+
 	public Universe() {
 		this.solarSystems = new THashMap<>();
 	}
@@ -44,19 +42,20 @@ public class Universe {
 	}
 
 	private void generateSolarSystem(final SolarSystem system) {
-		System.out.println("Generating planets for Solar System...");
-		for(final Point position : system.getPlanetLocations()) {
-			System.out.format("Generating Planet At %s", position);
-			final THashSet<Chunk> planetChunks = getChunksAroundLocation(position, system.getSize());
-			for(final Chunk chunk : planetChunks) {
-				System.out.format("Generating Chunk %s", chunk.getBase());
+		THashMap<Point, Planet> planets = system.getPlanets();
+		for (final Point pos : planets.keySet()) {
+			System.out.println(String.format("Generating Planet At %s", pos.toChunkString()));
+			final THashSet<Chunk> planetChunks = getChunksAroundLocation(pos, planets.get(pos).getRadius());
+			final int planetRadius = (int) Math.pow(system.getPlanet(pos).getRadius() * 16, 2);
+			for (final Chunk chunk : planetChunks) {
+				System.out.println(String.format("Generating Chunk %s", chunk.getBase().toChunkString()));
 				CuboidBlockMaterialBuffer buffer = chunk.getCuboid(false);
 				buffer.forEach(new CuboidBlockMaterialProcedure() {
 					@Override
 					public boolean execute(int x, int y, int z, short id, short data) {
-						Block block = chunk.getBlock(x, y, z);
-						if (position.distanceSquared(block.getPosition()) < system.getPlanet(position).getRadius()) {
-							System.out.format("Block at %s set to SOLID", block.getPosition());
+						Block block = chunk.getWorld().getBlock(x, y, z);
+						if (pos.distanceSquared(block.getPosition()) < planetRadius) {
+							//System.out.println(String.format("Setting Block At %s to SOLID_GREEN", block.getPosition().toBlockString()));
 							block.setMaterial(BlockMaterial.SOLID_GREEN);
 							return true;
 						}
@@ -75,8 +74,8 @@ public class Universe {
 				for (int dz = -(radius); dz < radius; dz++) {
 					Point chunkPos = center.add(dx, dy, dz);
 					if (chunkPos.distanceSquared(center) < radius) {
-						chunks.add(chunkPos.getChunk(LoadOption.LOAD_GEN));
-					}					
+						chunks.add(chunkPos.getWorld().getChunk(chunkPos.getFloorX(), chunkPos.getFloorZ(), chunkPos.getFloorZ(), LoadOption.LOAD_GEN));
+					}
 				}
 			}
 		}

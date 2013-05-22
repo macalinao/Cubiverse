@@ -9,7 +9,7 @@ public class Star extends CelestialObject {
 	private final long lifespan;
 	private long currentAge;
 
-	public Star(String name, double mass, double radius, long lifespan) {
+	public Star(String name, double mass, int radius, long lifespan) {
 		super(name, mass, radius);
 		this.lifespan = lifespan;
 	}
