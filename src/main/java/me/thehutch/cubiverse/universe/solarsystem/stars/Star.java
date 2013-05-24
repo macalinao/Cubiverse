@@ -1,4 +1,4 @@
-package me.thehutch.cubiverse.universe.solarsystem;
+package me.thehutch.cubiverse.universe.solarsystem.stars;
 
 import me.thehutch.cubiverse.universe.CelestialObject;
 /**
@@ -9,8 +9,8 @@ public class Star extends CelestialObject {
 	private final long lifespan;
 	private long currentAge;
 
-	public Star(String name, double mass, int radius, long lifespan) {
-		super(name, mass, radius);
+	public Star(String name, int size, long lifespan) {
+		super(name, size);
 		this.lifespan = lifespan;
 	}
 

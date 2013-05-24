@@ -26,7 +26,7 @@ public class CubiverseInputExecutor implements InputExecutor {
 		Transform ts = sc.getTransform();
 
 		Vector3 offset = Vector3.ZERO;
-		float speed = 50;
+		float speed = 250;
 		if (inputState.getForward()) {
 			offset = offset.subtract(ts.forwardVector().multiply(speed).multiply(dt));
 		} else if (inputState.getBackward()) {

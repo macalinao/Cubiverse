@@ -8,12 +8,10 @@ import org.spout.api.component.impl.DatatableComponent;
 public abstract class CelestialObject implements Storable {
 
 	private final String name;
-	private double mass;
 	private int radius;
 
-	public CelestialObject(String name, double mass, int radius) {
+	public CelestialObject(String name, int radius) {
 		this.name = name;
-		this.mass = mass;
 		this.radius = radius;
 	}
 
@@ -21,25 +19,12 @@ public abstract class CelestialObject implements Storable {
 		return name;
 	}
 
-	public double getMass() {
-		return mass;
-	}
-
-	public void setMass(double mass) {
-		this.mass = mass;
-	}
-
 	public int getRadius() {
 		return radius;
 	}
 
-	public void setRadius(int radius) {
-		this.radius = radius;
-	}
-
 	@Override
 	public void save(DatatableComponent datatable) {
-		
 		
 	}
 

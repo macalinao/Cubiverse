@@ -1,26 +1,15 @@
 package me.thehutch.cubiverse;
 
 import me.thehutch.cubiverse.universe.Universe;
-import me.thehutch.cubiverse.universe.solarsystem.SolarSystem;
 import org.spout.api.chat.ChatArguments;
 import org.spout.api.chat.style.ChatStyle;
-import org.spout.api.component.impl.ObserverComponent;
-import org.spout.api.entity.Entity;
-import org.spout.api.geo.LoadOption;
-import org.spout.api.geo.World;
-import org.spout.api.geo.discrete.Point;
-import org.spout.api.geo.discrete.Transform;
-import org.spout.api.math.Quaternion;
-import org.spout.api.math.Vector3;
 import org.spout.api.plugin.CommonPlugin;
 import org.spout.api.plugin.PluginLogger;
-import org.spout.api.util.FlatIterator;
 
 public class CubiversePlugin extends CommonPlugin {
 
 	private static CubiversePlugin instance;
-
-	private Universe universe;
+	private static Universe universe;
 
 	@Override
 	public void onLoad() {
@@ -46,8 +35,8 @@ public class CubiversePlugin extends CommonPlugin {
 			default:
 				break;
 		}
-		this.universe = new Universe();
-		this.universe.createNewSolarSystem("HelloCubiverse");
+		universe = new Universe();
+		universe.createNewSolarSystem("HelloCubiverse");
 
 		/*
 		World world = system.getWorld();
@@ -88,5 +77,9 @@ public class CubiversePlugin extends CommonPlugin {
 
 	public static CubiversePlugin getInstance() {
 		return instance;
+	}
+
+	public static Universe getUniverse() {
+		return universe;
 	}
 }

@@ -6,9 +6,7 @@ import me.thehutch.cubiverse.universe.CelestialObject;
  */
 public class Planet extends CelestialObject {
 
-	//private final PlanetBiome[] biomes;
-
-	public Planet(String name, double mass, int radius) {
-		super(name, mass, radius);
+	public Planet(String name, int radius) {
+		super(name, radius);
 	}
 }

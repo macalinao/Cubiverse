@@ -1,64 +1,27 @@
 package me.thehutch.cubiverse.universe.solarsystem;
 
+import me.thehutch.cubiverse.universe.solarsystem.stars.Star;
 import gnu.trove.map.hash.THashMap;
 import java.util.Collection;
-import java.util.Random;
 import java.util.Set;
 import me.thehutch.cubiverse.universe.solarsystem.planets.Planet;
-import me.thehutch.cubiverse.universe.solarsystem.stars.MainSequenceStar;
-import me.thehutch.cubiverse.universe.solarsystem.stars.Stars;
-import org.spout.api.geo.World;
-import org.spout.api.geo.discrete.Point;
+import org.spout.api.component.type.WorldComponent;
+import org.spout.api.math.Vector3;
 /**
  * @author thehutch
  */
-public class SolarSystem {
+public class SolarSystem extends WorldComponent {
 
-	private final World world;
-	private final int size, numOfPlanets;
-	private final THashMap<Point, Planet> planets;
-
+	private THashMap<Vector3, Planet> planets;
 	private Star star;
 
-	public SolarSystem(World world) {
-		this(world, 64, new Random().nextInt(7) + 3);
+	@Override
+	public void onAttached() {
+		planets = new THashMap<>();
 	}
 
-	public SolarSystem(World world, int size, int numOfPlanets) {
-		this(world, new MainSequenceStar(Stars.generateStarName()), size, numOfPlanets);
-	}
-
-	public SolarSystem(World world, Star star, int size, int numOfPlanets) {
-		this.world = world;
-		this.size = size;
-		this.numOfPlanets = numOfPlanets;
-		this.star = star;
-		this.planets = new THashMap<>();
-
-		//Load planets
-		planets.put(new Point(world, 0, 0, 0), new Planet("Test_Planet", 500, 2));
-	}
-
-	public World getWorld() {
-		return world;
-	}
-
-	/**
-	 * Get the size of the solar system (diameter), measured in chunks
-	 *
-	 * @return
-	 *			The diameter of the solar system in chunks
-	 */
-	public int getSize() {
-		return size;
-	}
-
-	/**
-	 * Gets the number of planets found in the solar system
-	 * @return
-	 */
 	public int getNumOfPlanets() {
-		return numOfPlanets;
+		return planets.size();
 	}
 
 	public Star getStar() {
@@ -69,15 +32,31 @@ public class SolarSystem {
 		this.star = star;
 	}
 
-	public Planet getPlanet(Point location) {
+	public Planet getPlanet(Vector3 location) {
 		return planets.get(location);
 	}
 
-	public Set<Point> getPlanetLocations() {
+	public Set<Vector3> getPlanetLocations() {
 		return planets.keySet();
 	}
 
-	public THashMap<Point, Planet> getPlanets() {
+	public THashMap<Vector3, Planet> getPlanets() {
 		return planets;
+	}
+
+	public void save() {
+		Collection<Planet> planets = this.planets.values();
+		getStar().save(getOwner().getData());
+		for(Planet planet : planets) {
+			planet.save(getOwner().getData());
+		}
+	}
+
+	public void load() {
+		Collection<Planet> planets = this.planets.values();
+		getStar().load(getOwner().getData());
+		for(Planet planet : planets) {
+			planet.load(getOwner().getData());
+		}
 	}
 }
