@@ -1,6 +1,6 @@
 package me.thehutch.cubiverse.universe.generator;
 
-import me.thehutch.cubiverse.CubiversePlugin;
+import me.thehutch.cubiverse.universe.generator.biomes.CubiverseBiomes;
 import net.royawesome.jlibnoise.NoiseQuality;
 import net.royawesome.jlibnoise.module.combiner.Add;
 import net.royawesome.jlibnoise.module.combiner.Multiply;
@@ -11,6 +11,7 @@ import net.royawesome.jlibnoise.module.source.Perlin;
 import org.spout.api.generator.WorldGeneratorUtils;
 import org.spout.api.generator.biome.BiomeGenerator;
 import org.spout.api.generator.biome.BiomeManager;
+import org.spout.api.generator.biome.selector.PerBlockBiomeSelector;
 import org.spout.api.geo.World;
 import org.spout.api.geo.cuboid.Chunk;
 import org.spout.api.material.BlockMaterial;
@@ -74,13 +75,16 @@ public class SolarSystemGenerator extends BiomeGenerator {
 	@Override
 	protected void generateTerrain(CuboidBlockMaterialBuffer blockData, int x, int y, int z, BiomeManager manager, long seed) {
 
+		
+
+		/*
 		CubiversePlugin.getUniverse().getSolarSystems();
 
 		Vector3 chunkPos = new Vector3(x, y, z);
 		Vector3 planetPos = new Vector3();
 		//if (chunkPos.distance(planetPos) > size) {
 		//	return;
-		//}
+		//}*/
 
 		ELEVATION.setSeed((int) seed * 23);
 		ROUGHNESS.setSeed((int) seed * 29);
@@ -103,10 +107,10 @@ public class SolarSystemGenerator extends BiomeGenerator {
 						blockData.set(totalX, totalY, totalZ, BlockMaterial.SOLID_BROWN);
 						continue;
 					}
-					//final double density = this.size / distance * (noise[xx][yy][zz] * 0.5 + 0.5);
-					//if (density >= 1) {
-					//	blockData.set(totalX, totalY, totalZ, BlockMaterial.SOLID_RED);
-					//}
+					final double density = distance * (noise[xx][yy][zz] * 0.5 + 0.5);
+					if (density >= 1) {
+						blockData.set(totalX, totalY, totalZ, BlockMaterial.SOLID_RED);
+					}
 				}
 			}
 		}
@@ -114,6 +118,7 @@ public class SolarSystemGenerator extends BiomeGenerator {
 
 	@Override
 	protected void registerBiomes() {
+		register(CubiverseBiomes.MOLTEN_PLANET);
 	}
 
 	@Override

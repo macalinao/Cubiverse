@@ -3,7 +3,6 @@ package me.thehutch.cubiverse.universe.solarsystem;
 import me.thehutch.cubiverse.universe.solarsystem.stars.Star;
 import gnu.trove.map.hash.THashMap;
 import java.util.Collection;
-import java.util.Set;
 import me.thehutch.cubiverse.universe.solarsystem.planets.Planet;
 import org.spout.api.component.type.WorldComponent;
 import org.spout.api.math.Vector3;
@@ -36,27 +35,29 @@ public class SolarSystem extends WorldComponent {
 		return planets.get(location);
 	}
 
-	public Set<Vector3> getPlanetLocations() {
-		return planets.keySet();
-	}
-
 	public THashMap<Vector3, Planet> getPlanets() {
 		return planets;
 	}
 
+	public Planet createPlanet(String name, int radius, Vector3 location) {
+		Planet planet = new Planet(name, radius);
+		planets.put(location, planet);
+		return planet;
+	}
+
 	public void save() {
 		Collection<Planet> planets = this.planets.values();
-		getStar().save(getOwner().getData());
+		getStar().save(getData());
 		for(Planet planet : planets) {
-			planet.save(getOwner().getData());
+			planet.save(getData());
 		}
 	}
 
 	public void load() {
 		Collection<Planet> planets = this.planets.values();
-		getStar().load(getOwner().getData());
+		getStar().load(getData());
 		for(Planet planet : planets) {
-			planet.load(getOwner().getData());
+			planet.load(getData());
 		}
 	}
 }

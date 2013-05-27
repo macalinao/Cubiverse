@@ -9,7 +9,6 @@ import org.spout.api.plugin.PluginLogger;
 public class CubiversePlugin extends CommonPlugin {
 
 	private static CubiversePlugin instance;
-	private static Universe universe;
 
 	@Override
 	public void onLoad() {
@@ -22,31 +21,10 @@ public class CubiversePlugin extends CommonPlugin {
 	@Override
 	public void onEnable() {
 		getEngine().getEventManager().registerEvents(new CubiverseListener(this), this);
+		
+		boolean newWorld = Universe.createNewSolarSystem("HelloCubiverse");
 
-		switch (getEngine().getPlatform()) {
-			case CLIENT:
-				if (getEngine().debugMode()) {
-					setupUniverse();
-				}
-				break;
-			case SERVER:
-				setupUniverse();
-				break;
-			default:
-				break;
-		}
-		universe = new Universe();
-		universe.createNewSolarSystem("HelloCubiverse");
-
-		/*
-		World world = system.getWorld();
-		Point spawn = world.getSpawnPoint().getPosition();
-		final int cx = spawn.getChunkX();
-		final int cz = spawn.getChunkZ();
-
-		Entity e = world.createAndSpawnEntity(spawn, LoadOption.LOAD_GEN, ObserverComponent.class);
-		e.setObserver(new FlatIterator(cx, 0, cz, 16, 3));
-		world.setSpawnPoint(new Transform(new Point(world, 0, 0, 0), Quaternion.IDENTITY, Vector3.ONE));*/
+		System.out.println(String.format("New world created '%s' : %s", Universe.getSolarSystem("HelloCubiverse").getOwner().getName(), newWorld));
 
 		getLogger().info("enabled");
 	}
@@ -57,29 +35,7 @@ public class CubiversePlugin extends CommonPlugin {
 		getLogger().info("disabled");
 	}
 
-	private void setupUniverse() {
-		/*
-		World world = getEngine().loadWorld("default", new FlatWorldGenerator());
-
-		final int radius = 3;
-		final boolean newWorld = world.getAge() <= 0 ;
-
-		Point point = world.getSpawnPoint().getPosition();
-		final int cx = point.getChunkX();
-		final int cz = point.getChunkZ();
-		
-		Entity e = world.createAndSpawnEntity(point, LoadOption.LOAD_GEN, ObserverComponent.class);
-		e.setObserver(new FlatIterator(cx, 0, cz, 16, radius));
-		if (newWorld) {
-			world.setSpawnPoint(new Transform(new Point(world, 0, 0, 0), Quaternion.IDENTITY, Vector3.ONE));
-		}*/
-	}
-
 	public static CubiversePlugin getInstance() {
 		return instance;
-	}
-
-	public static Universe getUniverse() {
-		return universe;
 	}
 }

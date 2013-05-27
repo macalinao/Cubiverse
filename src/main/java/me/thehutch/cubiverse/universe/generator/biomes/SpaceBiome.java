@@ -4,14 +4,14 @@ import me.thehutch.cubiverse.data.Climate;
 /**
  * @author thehutch
  */
-public class MoltenPlanetBiome extends CubiverseBiome {
+public class SpaceBiome extends CubiverseBiome {
 
-	public MoltenPlanetBiome(int biomeId) {
-		super(biomeId, Climate.HOT);
+	public SpaceBiome(int biomeId) {
+		super(biomeId, Climate.COLD);
 	}
 
 	@Override
 	public String getName() {
-		return "MoltenPlanetBiome";
+		return "SpaceBiome";
 	}
 }
