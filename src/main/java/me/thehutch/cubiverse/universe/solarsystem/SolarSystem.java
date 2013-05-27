@@ -6,6 +6,7 @@ import java.util.Collection;
 import me.thehutch.cubiverse.universe.solarsystem.planets.Planet;
 import org.spout.api.component.type.WorldComponent;
 import org.spout.api.math.Vector3;
+
 /**
  * @author thehutch
  */
@@ -43,21 +44,5 @@ public class SolarSystem extends WorldComponent {
 		Planet planet = new Planet(name, radius);
 		planets.put(location, planet);
 		return planet;
-	}
-
-	public void save() {
-		Collection<Planet> planets = this.planets.values();
-		getStar().save(getData());
-		for(Planet planet : planets) {
-			planet.save(getData());
-		}
-	}
-
-	public void load() {
-		Collection<Planet> planets = this.planets.values();
-		getStar().load(getData());
-		for(Planet planet : planets) {
-			planet.load(getData());
-		}
 	}
 }

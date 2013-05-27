@@ -2,6 +2,7 @@ package me.thehutch.cubiverse.universe.generator.biomes;
 
 import me.thehutch.cubiverse.data.Climate;
 import org.spout.api.generator.biome.Biome;
+
 /**
  * @author thehutch
  */

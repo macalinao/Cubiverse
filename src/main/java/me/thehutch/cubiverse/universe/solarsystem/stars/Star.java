@@ -1,10 +1,11 @@
 package me.thehutch.cubiverse.universe.solarsystem.stars;
 
-import me.thehutch.cubiverse.universe.CelestialObject;
+import me.thehutch.cubiverse.universe.SpaceObject;
+
 /**
  * @author thehutch
  */
-public class Star extends CelestialObject {
+public class Star extends SpaceObject {
 
 	private final long lifespan;
 	private long currentAge;

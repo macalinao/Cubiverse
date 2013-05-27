@@ -1,6 +1,7 @@
 package me.thehutch.cubiverse.universe.generator.biomes;
 
 import me.thehutch.cubiverse.data.Climate;
+
 /**
  * @author thehutch
  */

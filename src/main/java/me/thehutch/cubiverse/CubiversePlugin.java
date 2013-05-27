@@ -13,7 +13,7 @@ public class CubiversePlugin extends CommonPlugin {
 	@Override
 	public void onLoad() {
 		instance = this;
-		((PluginLogger)getLogger()).setTag(new ChatArguments(ChatStyle.RESET, "[", ChatStyle.DARK_CYAN, "Cubiverse", ChatStyle.RESET, "] "));
+		((PluginLogger) getLogger()).setTag(new ChatArguments(ChatStyle.RESET, "[", ChatStyle.DARK_CYAN, "Cubiverse", ChatStyle.RESET, "] "));
 
 		getLogger().info("loaded");
 	}
@@ -21,7 +21,7 @@ public class CubiversePlugin extends CommonPlugin {
 	@Override
 	public void onEnable() {
 		getEngine().getEventManager().registerEvents(new CubiverseListener(this), this);
-		
+
 		boolean newWorld = Universe.createNewSolarSystem("HelloCubiverse");
 
 		System.out.println(String.format("New world created '%s' : %s", Universe.getSolarSystem("HelloCubiverse").getOwner().getName(), newWorld));

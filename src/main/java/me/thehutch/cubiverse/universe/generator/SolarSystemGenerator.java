@@ -11,7 +11,6 @@ import net.royawesome.jlibnoise.module.source.Perlin;
 import org.spout.api.generator.WorldGeneratorUtils;
 import org.spout.api.generator.biome.BiomeGenerator;
 import org.spout.api.generator.biome.BiomeManager;
-import org.spout.api.generator.biome.selector.PerBlockBiomeSelector;
 import org.spout.api.geo.World;
 import org.spout.api.geo.cuboid.Chunk;
 import org.spout.api.material.BlockMaterial;
@@ -75,17 +74,6 @@ public class SolarSystemGenerator extends BiomeGenerator {
 	@Override
 	protected void generateTerrain(CuboidBlockMaterialBuffer blockData, int x, int y, int z, BiomeManager manager, long seed) {
 
-		
-
-		/*
-		CubiversePlugin.getUniverse().getSolarSystems();
-
-		Vector3 chunkPos = new Vector3(x, y, z);
-		Vector3 planetPos = new Vector3();
-		//if (chunkPos.distance(planetPos) > size) {
-		//	return;
-		//}*/
-
 		ELEVATION.setSeed((int) seed * 23);
 		ROUGHNESS.setSeed((int) seed * 29);
 		DETAIL.setSeed((int) seed * 17);
@@ -130,39 +118,4 @@ public class SolarSystemGenerator extends BiomeGenerator {
 	public String getName() {
 		return "SolarSystemGenerator";
 	}
-
-	/*
-	 private final SolarSystem solarSystem;
-
-	 public SolarSystemGenerator(SolarSystem solarSystem) {
-	 this.solarSystem = solarSystem;
-	 }
-
-	 public void generate() {
-	 THashMap<Point, Planet> planets = solarSystem.getPlanets();
-	 for(Point point : planets.keySet()) {
-	 final Planet planet = planets.get(point);
-	 THashSet<Chunk> chunks = getChunksAroundLocation(point, planet.getRadius());
-	 //new MoltenPlanetGenerator().generate(planet, point, chunks);
-	 }
-	 }
-
-	 private THashSet<Chunk> getChunksAroundLocation(Point center, int radius) {
-	 THashSet<Chunk> chunks = new THashSet<>();
-	 for(int dx = -radius ; dx<radius ; dx++) {
-	 for(int dy = -radius ; dy<radius ; dy++) {
-	 for(int dz = -radius ; dz<radius ; dz++) {
-	 Point chunkPos = center.add(dx, dy, dz);
-	 chunks.add(chunkPos.getWorld().getChunk(chunkPos.getFloorX(), chunkPos.getFloorY(), chunkPos.getFloorZ(), LoadOption.LOAD_GEN));
-	 }
-	 }
-	 }
-	 return chunks;
-	 }
-
-	 private CuboidBlockMaterialBuffer getPlanetCuboid(Point center, int radius) {
-	 int x, y, z;
-	 Vector3 base = new Vector3(center.getX() - (radius / 2), center.getY() - (radius / 2), center.getZ() - (radius / 2));
-	 return new CuboidBlockMaterialBuffer(base, new Vector3(radius, radius, radius));
-	 }*/
 }

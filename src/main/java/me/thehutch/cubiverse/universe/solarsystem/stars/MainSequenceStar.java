@@ -1,4 +1,5 @@
 package me.thehutch.cubiverse.universe.solarsystem.stars;
+
 /**
  * @author thehutch
  */
