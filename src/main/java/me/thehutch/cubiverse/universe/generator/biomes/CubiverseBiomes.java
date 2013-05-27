@@ -11,8 +11,9 @@ public class CubiverseBiomes {
 
 	//Planet Biomes
 	public static final CubiverseBiome MOLTEN_PLANET = new MoltenPlanetBiome(0);
-	//Space Biome
+	//Space Biomes
 	public static final CubiverseBiome SPACE_BIOME = new SpaceBiome(1337);
+	public static final CubiverseBiome ASTEROID_BIOME = new AsteroidBiome(1338);
 	//Planet Biomes By Name
 	private static final THashMap<String, CubiverseBiome> BY_NAME = new THashMap<>();
 

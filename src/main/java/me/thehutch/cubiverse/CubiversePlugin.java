@@ -22,9 +22,7 @@ public class CubiversePlugin extends CommonPlugin {
 	public void onEnable() {
 		getEngine().getEventManager().registerEvents(new CubiverseListener(this), this);
 
-		boolean newWorld = Universe.createNewSolarSystem("HelloCubiverse");
-
-		System.out.println(String.format("New world created '%s' : %s", Universe.getSolarSystem("HelloCubiverse").getOwner().getName(), newWorld));
+		Universe.createNewSolarSystem("HelloCubiverse");
 
 		getLogger().info("enabled");
 	}
