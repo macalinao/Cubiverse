@@ -11,7 +11,12 @@ import org.spout.api.math.Vector3;
  */
 public class SolarSystem extends WorldComponent {
 
+	//2 ^ 16 chunks
+	public static final int SYSTEM_RADIUS = 65536;
+	//The minimum distance required between planets
 	private static final int MIN_DISTANCE = 2048;
+
+	//
 	private THashMap<Vector3, Planet> planets;
 	private Star star;
 

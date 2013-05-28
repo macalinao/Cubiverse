@@ -1,20 +1,21 @@
 package me.thehutch.cubiverse.universe.generator;
 
+import java.util.Map;
 import me.thehutch.cubiverse.universe.Universe;
 import me.thehutch.cubiverse.universe.solarsystem.SolarSystem;
+import me.thehutch.cubiverse.universe.solarsystem.planets.Planet;
 import net.royawesome.jlibnoise.NoiseQuality;
 import net.royawesome.jlibnoise.module.modifier.ScalePoint;
 import net.royawesome.jlibnoise.module.source.Perlin;
-import org.spout.api.generator.Populator;
-import org.spout.api.generator.WorldGenerator;
+import org.spout.api.generator.biome.BiomeManager;
 import org.spout.api.geo.World;
-import org.spout.api.geo.cuboid.Chunk;
+import org.spout.api.math.Vector3;
 import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
 
 /**
  * @author thehutch
  */
-public class SolarSystemGenerator implements WorldGenerator {
+public class SolarSystemGenerator extends CubiverseGenerator {
 
 	private static final Perlin PERLIN = new Perlin();
 	private static final ScalePoint NOISE = new ScalePoint();
@@ -35,22 +36,40 @@ public class SolarSystemGenerator implements WorldGenerator {
 	@Override
 	public void generate(CuboidBlockMaterialBuffer blockData, int chunkX, int chunkY, int chunkZ, World world) {
 		SolarSystem solarSystem = Universe.getSolarSystem(world.getName());
+		Vector3 chunkPos = new Vector3(chunkX, chunkY, chunkZ);
+		Vector3 planetPos = getPlanetChunk(chunkPos, solarSystem);
+		if (planetPos != null) {
+			Planet planet = solarSystem.getPlanet(planetPos);
+			double surfaceHeight = chunkPos.distance(planetPos);
 
-	}
-
-	@Override
-	public int[][] getSurfaceHeight(World world, int chunkX, int chunkZ) {
-		return new int[Chunk.BLOCKS.SIZE][Chunk.BLOCKS.SIZE];
-	}
-
-	@Override
-	public Populator[] getPopulators() {
-		return new Populator[0];
+			
+		}
 	}
 
 	@Override
 	public String getName() {
 		return "SolarSystemGenerator";
+	}
+
+	@Override
+	protected void registerBiomes() {
+
+	}
+
+	@Override
+	protected void generateTerrain(CuboidBlockMaterialBuffer blockData, int x, int y, int z, BiomeManager manager, long seed) {
+
+	}
+
+	private Vector3 getPlanetChunk(Vector3 loc, SolarSystem solarSystem) {
+		Vector3 point = null;
+		for(Map.Entry<Vector3, Planet> entry : solarSystem.getPlanets().entrySet()) {
+			point = entry.getKey();
+			if (point.distance(loc) <= entry.getValue().getRadius()) {
+				return point;
+			}
+		}
+		return point;
 	}
 	/*
 	 private static final Perlin PERLIN = new Perlin();
