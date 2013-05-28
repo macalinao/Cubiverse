@@ -1,6 +1,6 @@
 package me.thehutch.cubiverse.data;
 
-import me.thehutch.cubiverse.universe.solarsystem.stars.Star;
+import me.thehutch.cubiverse.universe.solarsystem.Star;
 import org.spout.api.map.DefaultedKey;
 import org.spout.api.map.DefaultedKeyFactory;
 import org.spout.api.map.DefaultedKeyImpl;

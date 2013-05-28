@@ -1,8 +1,7 @@
 package me.thehutch.cubiverse.universe.solarsystem;
 
-import me.thehutch.cubiverse.universe.solarsystem.stars.Star;
 import gnu.trove.map.hash.THashMap;
-import java.util.Collection;
+import me.thehutch.cubiverse.data.Climate;
 import me.thehutch.cubiverse.universe.solarsystem.planets.Planet;
 import org.spout.api.component.type.WorldComponent;
 import org.spout.api.math.Vector3;
@@ -12,6 +11,7 @@ import org.spout.api.math.Vector3;
  */
 public class SolarSystem extends WorldComponent {
 
+	private static final int MIN_DISTANCE = 2048;
 	private THashMap<Vector3, Planet> planets;
 	private Star star;
 
@@ -40,9 +40,26 @@ public class SolarSystem extends WorldComponent {
 		return planets;
 	}
 
-	public Planet createPlanet(String name, int radius, Vector3 location) {
-		Planet planet = new Planet(name, radius);
-		planets.put(location, planet);
-		return planet;
+	public boolean createPlanet(String name, int radius, Vector3 location) {
+		int distanceToStar = (int) location.length() - getStar().getRadius() - radius;
+		if (distanceToStar > MIN_DISTANCE) {
+			Planet planet = new Planet(name, radius, distanceToStar, Climate.NORMAL);
+			planets.put(location, planet);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void onTick(float dt) {
+		super.onTick(dt);
+
+		/*
+		 Star systemStar = getStar();
+		 if (systemStar.getCurrentAge() >= systemStar.getLifespan()) {
+		 setStar(systemStar.getNextStageStar());
+		 } else {
+		 systemStar.incrementAge();
+		 }*/
 	}
 }

@@ -5,14 +5,14 @@ import me.thehutch.cubiverse.universe.solarsystem.Star;
 /**
  * @author thehutch
  */
-public class MainSequenceStar extends Star {
+public class WhiteDwarf extends Star {
 
-	public MainSequenceStar(String name) {
-		super(name, 2048, 5000000, 5800);
+	public WhiteDwarf() {
+		super("White Dwarf", 128, 2000000000, 25000);
 	}
 
 	@Override
 	public Star getNextStageStar() {
-		return new WhiteDwarf();
+		return null;
 	}
 }
