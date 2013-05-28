@@ -3,6 +3,7 @@ package me.thehutch.cubiverse.universe.solarsystem;
 import gnu.trove.map.hash.THashMap;
 import me.thehutch.cubiverse.data.Climate;
 import me.thehutch.cubiverse.universe.solarsystem.planets.Planet;
+import me.thehutch.cubiverse.universe.solarsystem.stars.MainSequenceStar;
 import org.spout.api.component.type.WorldComponent;
 import org.spout.api.math.Vector3;
 
@@ -14,15 +15,17 @@ public class SolarSystem extends WorldComponent {
 	//2 ^ 16 chunks
 	public static final int SYSTEM_RADIUS = 65536;
 	//The minimum distance required between planets
-	private static final int MIN_DISTANCE = 2048;
-
-	//
+	private static final int MIN_DISTANCE = 256;
+	//Planets in the solar system
 	private THashMap<Vector3, Planet> planets;
+	//The star centered at 0,0,0 in the solar system
 	private Star star;
 
 	@Override
 	public void onAttached() {
 		planets = new THashMap<>();
+		star = new MainSequenceStar("Sun");
+		createPlanet("Earth", 16, new Vector3(0, 512, 0)); //Test planet
 	}
 
 	public int getNumOfPlanets() {

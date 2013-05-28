@@ -7,15 +7,18 @@ import me.thehutch.cubiverse.universe.solarsystem.planets.Planet;
 import net.royawesome.jlibnoise.NoiseQuality;
 import net.royawesome.jlibnoise.module.modifier.ScalePoint;
 import net.royawesome.jlibnoise.module.source.Perlin;
-import org.spout.api.generator.biome.BiomeManager;
+import org.spout.api.generator.Populator;
+import org.spout.api.generator.WorldGenerator;
 import org.spout.api.geo.World;
+import org.spout.api.geo.cuboid.Chunk;
+import org.spout.api.material.BlockMaterial;
 import org.spout.api.math.Vector3;
 import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
 
 /**
  * @author thehutch
  */
-public class SolarSystemGenerator extends CubiverseGenerator {
+public class SolarSystemGenerator implements WorldGenerator {
 
 	private static final Perlin PERLIN = new Perlin();
 	private static final ScalePoint NOISE = new ScalePoint();
@@ -37,13 +40,22 @@ public class SolarSystemGenerator extends CubiverseGenerator {
 	public void generate(CuboidBlockMaterialBuffer blockData, int chunkX, int chunkY, int chunkZ, World world) {
 		SolarSystem solarSystem = Universe.getSolarSystem(world.getName());
 		Vector3 chunkPos = new Vector3(chunkX, chunkY, chunkZ);
-		Vector3 planetPos = getPlanetChunk(chunkPos, solarSystem);
+		Vector3 planetPos = getPlanetChunkLocation(chunkPos, solarSystem);
 		if (planetPos != null) {
 			Planet planet = solarSystem.getPlanet(planetPos);
-			double surfaceHeight = chunkPos.distance(planetPos);
-
-			
+			blockData.flood(BlockMaterial.SOLID_GREEN);
+			System.out.println("Planet " + planet.getName() + " chunk found at: " + chunkPos.toString());
 		}
+	}
+
+	@Override
+	public int[][] getSurfaceHeight(World world, int chunkX, int chunkZ) {
+		return new int[Chunk.BLOCKS.SIZE][Chunk.BLOCKS.SIZE];
+	}
+
+	@Override
+	public Populator[] getPopulators() {
+		return new Populator[0];
 	}
 
 	@Override
@@ -51,27 +63,35 @@ public class SolarSystemGenerator extends CubiverseGenerator {
 		return "SolarSystemGenerator";
 	}
 
-	@Override
-	protected void registerBiomes() {
-
-	}
-
-	@Override
-	protected void generateTerrain(CuboidBlockMaterialBuffer blockData, int x, int y, int z, BiomeManager manager, long seed) {
-
-	}
-
-	private Vector3 getPlanetChunk(Vector3 loc, SolarSystem solarSystem) {
-		Vector3 point = null;
-		for(Map.Entry<Vector3, Planet> entry : solarSystem.getPlanets().entrySet()) {
-			point = entry.getKey();
-			if (point.distance(loc) <= entry.getValue().getRadius()) {
-				return point;
+	private Vector3 getPlanetChunkLocation(Vector3 loc, SolarSystem solarSystem) {
+		Vector3 planetCore;
+		for (Map.Entry<Vector3, Planet> entry : solarSystem.getPlanets().entrySet()) {
+			planetCore = entry.getKey();
+			if (planetCore.distance(loc) <= entry.getValue().getRadius()) {
+				System.out.println("Found a planet chunk at " + loc);
+				return planetCore;
 			}
 		}
-		return point;
+		return null;
 	}
+
 	/*
+	 private static BiomeSelectorLayer buildSelectorStack(double scale) {
+	 final PerlinRangeLayer space = new PerlinRangeLayer(1).setOctaveCount(1).setFrequency(0.05 / scale);
+
+	 final BiomeSelectorLayer moltenPlanet = space.clone()
+	 .addElement(CubiverseBiomes.SPACE_BIOME, -1, -0.5f)
+	 .addElement(CubiverseBiomes.MOLTEN_PLANET, -0.5f, 0.25f)
+	 .addElement(CubiverseBiomes.ASTEROID_BIOME, 0.25f, 1f);
+
+	 final BiomeSelectorLayer layers = new PerlinRangeLayer(3).
+	 setOctaveCount(1).
+	 setFrequency(0.05 / scale).
+	 addElement(moltenPlanet, -1, 1);
+
+	 return layers;
+	 }
+	 /*
 	 private static final Perlin PERLIN = new Perlin();
 	 private static final ScalePoint NOISE = new ScalePoint();
 	 //Temp planet stats
@@ -158,23 +178,6 @@ public class SolarSystemGenerator extends CubiverseGenerator {
 	 @Override
 	 public String getName() {
 	 return "SolarSystemGenerator";
-	 }
-
-	 private static BiomeSelectorLayer buildSelectorStack(double scale) {
-
-	 final PerlinRangeLayer space = new PerlinRangeLayer(1).setOctaveCount(1).setFrequency(0.05 / scale);
-
-	 final BiomeSelectorLayer moltenPlanet = space.clone()
-	 .addElement(CubiverseBiomes.SPACE_BIOME, -1, -0.5f)
-	 .addElement(CubiverseBiomes.MOLTEN_PLANET, -0.5f, 0.25f)
-	 .addElement(CubiverseBiomes.ASTEROID_BIOME, 0.25f, 1f);
-
-	 final BiomeSelectorLayer layers = new PerlinRangeLayer(3).
-	 setOctaveCount(1).
-	 setFrequency(0.05 / scale).
-	 addElement(moltenPlanet, -1, 1);
-
-	 return layers;
 	 }
 	 */
 }
