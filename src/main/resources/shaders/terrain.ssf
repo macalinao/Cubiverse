@@ -1,0 +1,6 @@
+GL30:
+    Vertex: file://Cubiverse/shaders/terrain.330.vert
+    Fragment: file://Cubiverse/shaders/terrain.330.frag
+GL20:
+    Vertex: file://Cubiverse/shaders/terrain.120.vert
+    Fragment: file://Cubiverse/shaders/terrain.120.frag

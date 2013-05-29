@@ -2,7 +2,7 @@ package me.thehutch.cubiverse.universe.solarsystem;
 
 import java.awt.Color;
 import me.thehutch.cubiverse.universe.SpaceObject;
-import me.thehutch.cubiverse.utils.ColourUtils;
+import me.thehutch.cubiverse.utils.Utils;
 
 /**
  * @author thehutch
@@ -35,7 +35,7 @@ public abstract class Star extends SpaceObject {
 
 	public final Color getColour() {
 		float λ = (float) (2.898E-3 / getSurfaceTemperature());
-		return ColourUtils.convertWavelengthToRGB(λ);
+		return Utils.convertWavelengthToRGB(λ);
 	}
 
 	public final long getLifespan() {

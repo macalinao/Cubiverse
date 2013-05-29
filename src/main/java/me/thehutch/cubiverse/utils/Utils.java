@@ -5,7 +5,7 @@ import java.awt.Color;
 /**
  * @author thehutch
  */
-public class ColourUtils {
+public class Utils {
 
 	public static Color convertWavelengthToRGB(float wavelength) {
 		if (wavelength < 380) {
