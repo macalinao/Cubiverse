@@ -1,2 +1,2 @@
-Mesh: cubemesh://Cubiverse/materials/blocks/moltenrock/moltenrock.spm
-Material: material://Cubiverse/materials/terrain.smt
+Mesh: cubemesh://Cubiverse/materials/blocks/moltenrock/moltenrock.uvs
+Material: material://Cubiverse/materials/blocks/moltenrock/moltenrock.smt

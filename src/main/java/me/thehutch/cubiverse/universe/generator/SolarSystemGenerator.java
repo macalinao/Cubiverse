@@ -1,17 +1,11 @@
 package me.thehutch.cubiverse.universe.generator;
 
-import java.util.Map;
-import me.thehutch.cubiverse.universe.Universe;
-import me.thehutch.cubiverse.universe.solarsystem.SolarSystem;
-import me.thehutch.cubiverse.universe.solarsystem.planets.Planet;
-import net.royawesome.jlibnoise.NoiseQuality;
-import net.royawesome.jlibnoise.module.modifier.ScalePoint;
-import net.royawesome.jlibnoise.module.source.Perlin;
+import java.util.Random;
+import me.thehutch.cubiverse.materials.CubiverseMaterials;
 import org.spout.api.generator.Populator;
 import org.spout.api.generator.WorldGenerator;
 import org.spout.api.geo.World;
 import org.spout.api.geo.cuboid.Chunk;
-import org.spout.api.material.BlockMaterial;
 import org.spout.api.math.Vector3;
 import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
 
@@ -20,31 +14,40 @@ import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
  */
 public class SolarSystemGenerator implements WorldGenerator {
 
-	private static final Perlin PERLIN = new Perlin();
-	private static final ScalePoint NOISE = new ScalePoint();
-
-	static {
-		PERLIN.setFrequency(0.075f);
-		PERLIN.setLacunarity(1.5f);
-		PERLIN.setNoiseQuality(NoiseQuality.BEST);
-		PERLIN.setPersistence(0.325f);
-		PERLIN.setOctaveCount(28);
-
-		NOISE.SetSourceModule(0, PERLIN);
-		NOISE.setxScale(1);
-		NOISE.setyScale(1);
-		NOISE.setzScale(1);
-	}
+	private static final int CELL_SIZE = 16 * 16;
+	private static final int MAX_PLANET_SIZE = CELL_SIZE / 2;
+	private static final int MIN_PLANET_SIZE = CELL_SIZE / 8;
 
 	@Override
 	public void generate(CuboidBlockMaterialBuffer blockData, int chunkX, int chunkY, int chunkZ, World world) {
-		SolarSystem solarSystem = Universe.getSolarSystem(world.getName());
-		Vector3 chunkPos = new Vector3(chunkX, chunkY, chunkZ);
-		Vector3 planetPos = getPlanetChunkLocation(chunkPos, solarSystem);
-		if (planetPos != null) {
-			Planet planet = solarSystem.getPlanet(planetPos);
-			blockData.flood(BlockMaterial.SOLID_GREEN);
-			System.out.println("Planet " + planet.getName() + " chunk found at: " + chunkPos.toString());
+		Vector3 chunkPos = new Vector3(chunkX, chunkY, chunkZ).multiply(16);
+		Vector3 cellPos = chunkPos.divide(CELL_SIZE);
+		Vector3 cellFlooredPos = cellPos.floor();
+		Vector3 cellLocalVector = cellPos.subtract(cellFlooredPos);
+		Vector3 cellCenterWorldSpace = cellLocalVector.add(0.5f, 0.5f, 0.5f).multiply(CELL_SIZE);
+
+		long hash = ((long) cellCenterWorldSpace.getX()) * (7919 ^ (long) cellCenterWorldSpace.getY() * 7901) ^ ((long) cellCenterWorldSpace.getZ() * 7907);
+		hash *= hash + 101;
+
+		Random rand = new Random(hash);
+		double rDouble = rand.nextDouble();
+		if (rDouble > 0.5) {
+			int xAxis = rand.nextInt(CELL_SIZE) - MAX_PLANET_SIZE;
+			int yAxis = rand.nextInt(CELL_SIZE) - MAX_PLANET_SIZE;
+			int zAxis = rand.nextInt(CELL_SIZE) - MAX_PLANET_SIZE;
+			int radius = rand.nextInt(MAX_PLANET_SIZE - MIN_PLANET_SIZE) + MIN_PLANET_SIZE;
+
+			Vector3 planetCenter = cellCenterWorldSpace.add(xAxis, yAxis, zAxis);
+			Vector3 distanceVec = chunkPos.subtract(planetCenter);
+
+			System.out.println("Distance = " + distanceVec.length() + "  |  Radius = " + radius);
+			System.out.println("Location of planet center = " + planetCenter);
+			System.out.println("Location of chunk = " + chunkPos.divide(16));
+
+			if (distanceVec.lengthSquared() < radius * radius) {
+				System.out.println("Planet chunk generated at " + chunkPos.toString());
+				blockData.flood(CubiverseMaterials.MOLTEN_ROCK);
+			}
 		}
 	}
 
@@ -62,13 +65,29 @@ public class SolarSystemGenerator implements WorldGenerator {
 	public String getName() {
 		return "SolarSystemGenerator";
 	}
+}
+
+
+
+
+/*
+
+* /*SolarSystem solarSystem = Universe.getSolarSystem(world.getName());
+		Vector3 chunkPos = new Vector3(chunkX, chunkY, chunkZ);
+		Vector3 planetPos = getPlanetChunkLocation(chunkPos, solarSystem);
+		if (planetPos != null) {
+			Planet planet = solarSystem.getPlanet(planetPos);
+			blockData.flood(CubiverseMaterials.MOLTEN_ROCK);
+			//System.out.println("Planet " + planet.getName() + " chunk found at: " + chunkPos.toString());
+		}
 
 	private Vector3 getPlanetChunkLocation(Vector3 loc, SolarSystem solarSystem) {
 		Vector3 planetCore;
 		for (Map.Entry<Vector3, Planet> entry : solarSystem.getPlanets().entrySet()) {
 			planetCore = entry.getKey();
+			System.out.println("Distance is " + planetCore.distance(loc));
 			if (planetCore.distance(loc) <= entry.getValue().getRadius()) {
-				System.out.println("Found a planet chunk at " + loc);
+				System.out.println("Found a planet chunk at " + loc.toString());
 				return planetCore;
 			}
 		}
@@ -180,4 +199,3 @@ public class SolarSystemGenerator implements WorldGenerator {
 	 return "SolarSystemGenerator";
 	 }
 	 */
-}

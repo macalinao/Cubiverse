@@ -8,16 +8,16 @@ import me.thehutch.cubiverse.universe.SpaceObject;
  */
 public class Planet extends SpaceObject {
 
-	private final int distanceToStar;
+	private final double distanceToStar;
 	private final Climate climate;
 
-	public Planet(String name, int radius, int distanceToStar, Climate climate) {
+	public Planet(String name, int radius, double distanceToStar, Climate climate) {
 		super(name, radius);
 		this.distanceToStar = distanceToStar;
 		this.climate = climate;
 	}
 
-	public int getDistanceToStar() {
+	public double getDistanceToStar() {
 		return distanceToStar;
 	}
 

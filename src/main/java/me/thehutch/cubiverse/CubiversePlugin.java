@@ -14,6 +14,9 @@ public class CubiversePlugin extends CommonPlugin {
 	public void onLoad() {
 		instance = this;
 		((PluginLogger) getLogger()).setTag(new ChatArguments(ChatStyle.RESET, "[", ChatStyle.DARK_CYAN, "Cubiverse", ChatStyle.RESET, "] "));
+
+		
+
 		getLogger().info("loaded");
 	}
 

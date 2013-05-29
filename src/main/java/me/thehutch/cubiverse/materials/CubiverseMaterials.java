@@ -1,12 +1,13 @@
 package me.thehutch.cubiverse.materials;
 
-import me.thehutch.cubiverse.materials.blocks.Solid;
+import org.spout.api.material.BlockMaterial;
+import org.spout.api.material.basic.BasicSolid;
 /**
  * @author thehutch
  */
 public class CubiverseMaterials {
 
 	//Solids
-	public static final Solid MOLTEN_ROCK = new Solid("Molten Rock", "model://Cubiverse/materials/blocks/molten_rock.spm");
+	public static final BlockMaterial MOLTEN_ROCK = new BasicSolid("Molten Rock", "model://Cubiverse/materials/blocks/moltenrock/moltenrock.spm");
 
 }

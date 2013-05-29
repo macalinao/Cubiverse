@@ -15,7 +15,7 @@ public class SolarSystem extends WorldComponent {
 	//2 ^ 16 chunks
 	public static final int SYSTEM_RADIUS = 65536;
 	//The minimum distance required between planets
-	private static final int MIN_DISTANCE = 256;
+	private static final int MIN_DISTANCE = 16;
 	//Planets in the solar system
 	private THashMap<Vector3, Planet> planets;
 	//The star centered at 0,0,0 in the solar system
@@ -25,7 +25,7 @@ public class SolarSystem extends WorldComponent {
 	public void onAttached() {
 		planets = new THashMap<>();
 		star = new MainSequenceStar("Sun");
-		createPlanet("Earth", 16, new Vector3(0, 512, 0)); //Test planet
+		createPlanet("Earth", 4, new Vector3(0, 32, 0)); //Test planet
 	}
 
 	public int getNumOfPlanets() {
@@ -49,10 +49,12 @@ public class SolarSystem extends WorldComponent {
 	}
 
 	public boolean createPlanet(String name, int radius, Vector3 location) {
-		int distanceToStar = (int) location.length() - getStar().getRadius() - radius;
+		double distanceToStar = location.lengthSquared() - getStar().getRadius() - radius;
 		if (distanceToStar > MIN_DISTANCE) {
 			Planet planet = new Planet(name, radius, distanceToStar, Climate.NORMAL);
 			planets.put(location, planet);
+			System.out.println("New planet '" + name + "' created at " + location.toString() +
+								" with a distance of " + distanceToStar + " from the system star");
 			return true;
 		}
 		return false;

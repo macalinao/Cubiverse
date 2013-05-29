@@ -8,7 +8,7 @@ import me.thehutch.cubiverse.universe.solarsystem.Star;
 public class MainSequenceStar extends Star {
 
 	public MainSequenceStar(String name) {
-		super(name, 64, 5000000, 5800);
+		super(name, 8, 5000000, 5800);
 	}
 
 	@Override
