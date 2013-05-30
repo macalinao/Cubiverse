@@ -1,11 +1,15 @@
 package me.thehutch.cubiverse.universe.generator;
 
 import java.util.Random;
+import me.thehutch.cubiverse.CubiversePlugin;
 import me.thehutch.cubiverse.materials.CubiverseMaterials;
+import org.spout.api.chat.ChatArguments;
+import org.spout.api.chat.style.ChatStyle;
 import org.spout.api.generator.Populator;
 import org.spout.api.generator.WorldGenerator;
 import org.spout.api.geo.World;
 import org.spout.api.geo.cuboid.Chunk;
+import org.spout.api.material.BlockMaterial;
 import org.spout.api.math.Vector3;
 import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
 
@@ -14,41 +18,62 @@ import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
  */
 public class SolarSystemGenerator implements WorldGenerator {
 
-	private static final int CELL_SIZE = 16 * 16;
+	private static final int CELL_SIZE = 8 * 16;
 	private static final int MAX_PLANET_SIZE = CELL_SIZE / 2;
-	private static final int MIN_PLANET_SIZE = CELL_SIZE / 8;
+	private static final int MIN_PLANET_SIZE = CELL_SIZE / 4;
+	private static final Random rand = new Random();
 
 	@Override
 	public void generate(CuboidBlockMaterialBuffer blockData, int chunkX, int chunkY, int chunkZ, World world) {
+		ChatArguments message = new ChatArguments(ChatStyle.DARK_RED, "\n====================================\n", ChatStyle.BLUE);
+		
 		Vector3 chunkPos = new Vector3(chunkX, chunkY, chunkZ).multiply(16);
+		message.append("Chunk Position: ", chunkPos, "\n");
+
 		Vector3 cellPos = chunkPos.divide(CELL_SIZE);
+		message.append("Cell Position: ", cellPos, "\n");
+
 		Vector3 cellFlooredPos = cellPos.floor();
+		message.append("Cell Floored Position: ", cellFlooredPos, "\n");
+
 		Vector3 cellLocalVector = cellPos.subtract(cellFlooredPos);
+		message.append("Cell Location Vector: ", cellLocalVector, "\n");
+
 		Vector3 cellCenterWorldSpace = cellLocalVector.add(0.5f, 0.5f, 0.5f).multiply(CELL_SIZE);
+		message.append("Cell Centered In World Space: ", cellCenterWorldSpace, "\n");
+
 
 		long hash = ((long) cellCenterWorldSpace.getX()) * (7919 ^ (long) cellCenterWorldSpace.getY() * 7901) ^ ((long) cellCenterWorldSpace.getZ() * 7907);
 		hash *= hash + 101;
+		message.append("Hash: ", hash, "\n");
 
-		Random rand = new Random(hash);
+		rand.setSeed(hash);
 		double rDouble = rand.nextDouble();
+		message.append("Random Double: ", rDouble, "\n");
 		if (rDouble > 0.5) {
 			int xAxis = rand.nextInt(CELL_SIZE) - MAX_PLANET_SIZE;
 			int yAxis = rand.nextInt(CELL_SIZE) - MAX_PLANET_SIZE;
 			int zAxis = rand.nextInt(CELL_SIZE) - MAX_PLANET_SIZE;
+			message.append("XYZ offsets: [", xAxis, ",", yAxis, ",", zAxis, "]\n");
+
 			int radius = rand.nextInt(MAX_PLANET_SIZE - MIN_PLANET_SIZE) + MIN_PLANET_SIZE;
+			message.append("Planet Radius: ", radius, "\n");
 
 			Vector3 planetCenter = cellCenterWorldSpace.add(xAxis, yAxis, zAxis);
-			Vector3 distanceVec = chunkPos.subtract(planetCenter);
+			message.append("Planet Center: ", planetCenter, "\n");
 
-			System.out.println("Distance = " + distanceVec.length() + "  |  Radius = " + radius);
-			System.out.println("Location of planet center = " + planetCenter);
-			System.out.println("Location of chunk = " + chunkPos.divide(16));
+			Vector3 distanceVec = chunkPos.subtract(planetCenter);
+			message.append("Distance Vector: ", distanceVec, "\n");
+			message.append("Distance Squared: ", distanceVec.lengthSquared(), "\n");
+			message.append("Radius Squared: ", radius * radius, "\n");
 
 			if (distanceVec.lengthSquared() < radius * radius) {
-				System.out.println("Planet chunk generated at " + chunkPos.toString());
+				message.append(ChatStyle.GOLD, "Planet chunk generated at ", chunkPos.toString(), "\n");
 				blockData.flood(CubiverseMaterials.MOLTEN_ROCK);
 			}
 		}
+		message.append(ChatStyle.DARK_RED, "====================================\n");
+		CubiversePlugin.getInstance().getLogger().info(message.asString());
 	}
 
 	@Override
