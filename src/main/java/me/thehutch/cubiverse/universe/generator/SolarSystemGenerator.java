@@ -9,7 +9,6 @@ import org.spout.api.generator.Populator;
 import org.spout.api.generator.WorldGenerator;
 import org.spout.api.geo.World;
 import org.spout.api.geo.cuboid.Chunk;
-import org.spout.api.material.BlockMaterial;
 import org.spout.api.math.Vector3;
 import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
 
@@ -26,7 +25,7 @@ public class SolarSystemGenerator implements WorldGenerator {
 	@Override
 	public void generate(CuboidBlockMaterialBuffer blockData, int chunkX, int chunkY, int chunkZ, World world) {
 		ChatArguments message = new ChatArguments(ChatStyle.DARK_RED, "\n====================================\n", ChatStyle.BLUE);
-		
+
 		Vector3 chunkPos = new Vector3(chunkX, chunkY, chunkZ).multiply(16);
 		message.append("Chunk Position: ", chunkPos, "\n");
 
