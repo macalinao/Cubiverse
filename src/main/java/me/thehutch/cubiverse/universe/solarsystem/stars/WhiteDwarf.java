@@ -1,18 +1,21 @@
 package me.thehutch.cubiverse.universe.solarsystem.stars;
 
-import me.thehutch.cubiverse.universe.solarsystem.Star;
-
 /**
  * @author thehutch
  */
 public class WhiteDwarf extends Star {
 
-	public WhiteDwarf() {
-		super("White Dwarf", 128, 2000000000, 25000);
+	@Override
+	public void onAttached() {
+		super.onAttached();
+		this.setName("White Dwarf");
+		this.setRadius(24);
+		this.setLifespan(DEFAULT_LIFESPAN * 24);
+		this.setSurfaceTemperature(25000);
 	}
 
 	@Override
-	public Star getNextStageStar() {
-		return null;
+	public Class<? extends Star> getNextStageStar() {
+		return null; //TODO: Black Dwarf
 	}
 }

@@ -1,27 +1,42 @@
 package me.thehutch.cubiverse.universe.solarsystem.planets;
 
 import me.thehutch.cubiverse.data.Climate;
-import me.thehutch.cubiverse.universe.SpaceObject;
+import me.thehutch.cubiverse.universe.SpaceComponent;
 
 /**
  * @author thehutch
  */
-public class Planet extends SpaceObject {
+public class Planet extends SpaceComponent {
 
-	private final double distanceToStar;
-	private final Climate climate;
+	//Defaults
+	public static final Climate DEFAULT_CLIMATE = Climate.NORMAL;
+	//Planet Data
+	private double distanceToStar;
+	private Climate climate;
 
-	public Planet(String name, int radius, double distanceToStar, Climate climate) {
-		super(name, radius);
-		this.distanceToStar = distanceToStar;
-		this.climate = climate;
+	@Override
+	public void onAttached() {
+		super.onAttached();
+		this.setName(DEFAULT_NAME + " PLANET");
+		this.setClimate(DEFAULT_CLIMATE);
+		this.setDistanceToStar(-1);
 	}
 
-	public double getDistanceToStar() {
+	public final double getDistanceToStar() {
 		return distanceToStar;
 	}
 
-	public Climate getClimate() {
+	public final Planet setDistanceToStar(double distanceToStar) {
+		this.distanceToStar = distanceToStar;
+		return this;
+	}
+
+	public final Climate getClimate() {
 		return climate;
+	}
+
+	public final Planet setClimate(Climate climate) {
+		this.climate = climate;
+		return this;
 	}
 }

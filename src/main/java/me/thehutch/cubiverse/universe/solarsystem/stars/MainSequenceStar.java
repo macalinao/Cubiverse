@@ -1,18 +1,21 @@
 package me.thehutch.cubiverse.universe.solarsystem.stars;
 
-import me.thehutch.cubiverse.universe.solarsystem.Star;
-
 /**
  * @author thehutch
  */
 public class MainSequenceStar extends Star {
 
-	public MainSequenceStar(String name) {
-		super(name, 8, 5000000, 5800);
+	@Override
+	public void onAttached() {
+		super.onAttached();
+		this.setName("Main Sequence Star");
+		this.setRadius(196);
+		this.setLifespan(DEFAULT_LIFESPAN);
+		this.setSurfaceTemperature(DEFAULT_SURFACE_TERMPATURE);
 	}
 
 	@Override
-	public Star getNextStageStar() {
-		return new WhiteDwarf();
+	public Class<? extends Star> getNextStageStar() {
+		return WhiteDwarf.class;
 	}
 }
