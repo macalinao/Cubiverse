@@ -61,7 +61,7 @@ public class SolarSystemGenerator implements WorldGenerator {
 			Vector3 planetCenter = cellCenterWorldSpace.add(xAxis, yAxis, zAxis);
 			message.append("Planet Center: ", planetCenter, "\n");
 
-			Vector3 distanceVec = chunkPos.subtract(planetCenter);
+			Vector3 distanceVec = chunkPos.subtract(planetCenter.divide(16));
 			message.append("Distance Vector: ", distanceVec, "\n");
 			message.append("Distance Squared: ", distanceVec.lengthSquared(), "\n");
 			message.append("Radius Squared: ", radius * radius, "\n");
