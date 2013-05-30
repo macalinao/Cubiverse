@@ -1,6 +1,8 @@
 package me.thehutch.cubiverse.data;
 
-import me.thehutch.cubiverse.universe.solarsystem.Star;
+import me.thehutch.cubiverse.universe.solarsystem.SolarSystem;
+import me.thehutch.cubiverse.universe.solarsystem.planets.Planet;
+import me.thehutch.cubiverse.universe.solarsystem.stars.Star;
 import org.spout.api.map.DefaultedKey;
 import org.spout.api.map.DefaultedKeyFactory;
 import org.spout.api.map.DefaultedKeyImpl;
@@ -10,15 +12,16 @@ import org.spout.api.map.DefaultedKeyImpl;
  */
 public class CubiverseData {
 
-	//Universe
 	//Solar-System
-	public static final DefaultedKey<String> SOLAR_SYSTEM_NAME = new DefaultedKeyImpl<>("name", "NULL_NAME");
-	public static final DefaultedKey<Star> SOLAR_SYSTEM_STAR = new DefaultedKeyFactory<>("solar_system_star", Star.class);
+	public static final DefaultedKey<String> SOLAR_SYSTEM_NAME = new DefaultedKeyImpl<>("SolarSystemName", SolarSystem.DEFAULT_SOLAR_SYSTEM_NAME);
+	public static final DefaultedKey<? extends Star> SOLAR_SYSTEM_STAR = new DefaultedKeyFactory<>("SolarSystemStar", SolarSystem.DEFAULT_STAR);
 	//Star
-	public static final DefaultedKey<String> STAR_NAME = new DefaultedKeyImpl<>("star_name", "NULL_NAME");
-	public static final DefaultedKey<Long> STAR_AGE = new DefaultedKeyImpl<>("star_age", 0L);
-	public static final DefaultedKey<Long> STAR_LIFESPAN = new DefaultedKeyImpl<>("star_lifespan", Long.MAX_VALUE);
+	public static final DefaultedKey<String> STAR_NAME = new DefaultedKeyImpl<>("StarName", Star.DEFAULT_NAME);
+	public static final DefaultedKey<Integer> STAR_LIFESPAN = new DefaultedKeyImpl<>("StarLifespan", Star.DEFAULT_LIFESPAN);
+	public static final DefaultedKey<Integer> STAR_AGE = new DefaultedKeyImpl<>("StarAge", 0);
 	//Planet
+	public static final DefaultedKey<Climate> PLANET_CLIMATE = new DefaultedKeyImpl<>("PlanetClimate", Planet.DEFAULT_CLIMATE);
+	public static final DefaultedKey<Double> PLANET_DISTANCE = new DefaultedKeyImpl<>("PlanetDistance", -1.0);
 	//Entity
 	//Player
 }
