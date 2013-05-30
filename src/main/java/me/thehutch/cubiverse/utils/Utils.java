@@ -7,6 +7,13 @@ import java.awt.Color;
  */
 public class Utils {
 
+	/**
+	 * Converts the wavelength given in nanometers to a colour of visible light.<br><br>
+	 * Wavelengths outside of the visible spectrum return black
+	 *
+	 * @param wavelength Nanomater wavelength between 380nm (inclusive) and 780nm (exclusive)
+	 * @return
+	 */
 	public static Color convertWavelengthToRGB(float wavelength) {
 		if (wavelength < 380) {
 			return new Color(0.0f, 0.0f, 0.0f);
@@ -30,5 +37,16 @@ public class Utils {
 			return new Color(1.0f, 0.0f, 0.0f);
 		}
 		return new Color(0.0f, 0.0f, 0.0f);
+	}
+
+	/**
+	 * Flux = Luminosity ---------- 4πd²
+	 *
+	 * @param luminosity
+	 * @param distance
+	 * @return
+	 */
+	public static double calculateLightIntensity(double luminosity, double distance) {
+		return luminosity / (4 * Math.PI * (distance * distance));
 	}
 }
