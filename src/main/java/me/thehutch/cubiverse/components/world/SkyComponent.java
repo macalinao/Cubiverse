@@ -24,7 +24,7 @@ public class SkyComponent extends WorldComponent {
 			setModel(DEFAULT_MODEL);
 		}
 		Spout.getLogger().log(Level.INFO, "Loading Sky Model {0}", model);
-		Model model = (Model) getOwner().getEngine().getFilesystem().getResource(getModel());
+		Model model = getOwner().getEngine().getFileSystem().getResource(getModel());
 		model.getRenderMaterial().addRenderEffect(CubiverseEffects.SKY);
 		getOwner().getData().put("skydome", model);
 	}

@@ -27,7 +27,6 @@ public class CubiverseListener implements Listener {
 			return;
 		}
 		Player player = ((Client) plugin.getEngine()).getPlayer();
-		//player.teleport(new Point(player.getWorld(), 0, 0, 0));
 
 		player.add(CameraComponent.class);
 		player.add(InteractComponent.class);
