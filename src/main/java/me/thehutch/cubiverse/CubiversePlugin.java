@@ -8,8 +8,6 @@ import org.spout.api.plugin.PluginLogger;
 
 public class CubiversePlugin extends CommonPlugin {
 
-	private static CubiversePlugin instance;
-
 	@Override
 	public void onLoad() {
 		((PluginLogger) getLogger()).setTag(new ChatArguments(ChatStyle.RESET, "[", ChatStyle.DARK_CYAN, "Cubiverse", ChatStyle.RESET, "] "));
@@ -18,8 +16,6 @@ public class CubiversePlugin extends CommonPlugin {
 
 	@Override
 	public void onEnable() {
-		instance = this;
-
 		//Events
 		getEngine().getEventManager().registerEvents(new CubiverseListener(this), this);
 
@@ -29,11 +25,6 @@ public class CubiversePlugin extends CommonPlugin {
 
 	@Override
 	public void onDisable() {
-		instance = null;
 		getLogger().info("disabled");
-	}
-
-	public static CubiversePlugin getInstance() {
-		return instance;
 	}
 }

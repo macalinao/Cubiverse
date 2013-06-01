@@ -3,6 +3,8 @@ package me.thehutch.cubiverse.components.entity.player;
 import me.thehutch.cubiverse.CubiversePlugin;
 import me.thehutch.cubiverse.universe.solarsystem.SolarSystem;
 import me.thehutch.cubiverse.universe.solarsystem.planets.Planet;
+
+import org.spout.api.Engine;
 import org.spout.api.Spout;
 import org.spout.api.component.type.EntityComponent;
 import org.spout.api.entity.Player;
@@ -14,16 +16,18 @@ import org.spout.api.scheduler.TaskPriority;
  */
 public final class PlanetTrackerComponent extends EntityComponent {
 
+	private Engine engine;
 	private Planet currentPlanet;
-	private Player player;
+	private String player;
 
 	@Override
 	public void onAttached() {
 		if (!(getOwner() instanceof Player)) {
 			throw new IllegalStateException("Can only attached PlayerPlanetComponent to a player");
 		}
-		player = (Player) getOwner();
-		Spout.getScheduler().scheduleSyncRepeatingTask(CubiversePlugin.getInstance(), new Runnable() {
+		player = ((Player) getOwner()).getName();
+		engine = getOwner().getEngine();
+		engine.getScheduler().scheduleSyncRepeatingTask(engine.getPluginManager().getPlugin("Cubiverse"), new Runnable() {
 			@Override
 			public void run() {
 				Point playerChunkLoc = getPlayer().getChunk().getBase();
@@ -38,7 +42,7 @@ public final class PlanetTrackerComponent extends EntityComponent {
 	}
 
 	public Player getPlayer() {
-		return player;
+		return engine.getPlayer(player, true);
 	}
 
 	public Planet getPlanet() {
