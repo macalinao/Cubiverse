@@ -2,6 +2,7 @@ package me.thehutch.cubiverse.universe.generator;
 
 import java.util.Random;
 import me.thehutch.cubiverse.materials.CubiverseMaterials;
+import me.thehutch.cubiverse.universe.solarsystem.SolarSystem;
 import net.royawesome.jlibnoise.NoiseQuality;
 import net.royawesome.jlibnoise.module.source.Perlin;
 import org.spout.api.generator.Populator;
@@ -19,11 +20,11 @@ import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
 public class SolarSystemGenerator implements WorldGenerator {
 
 	//Cell size (8 chunks)
-	private static final int CELL_SIZE = 16 * 16;
+	private static final int CELL_SIZE = 32 * 16;
 	//Maximum planet radius
-	private static final int MAX_PLANET_RADIUS = CELL_SIZE / 2;
+	private static final int MAX_PLANET_RADIUS = CELL_SIZE / 4;
 	//Minimum planet radius
-	private static final int MIN_PLANET_RADIUS = CELL_SIZE / 4;
+	private static final int MIN_PLANET_RADIUS = CELL_SIZE / 8;
 	//Percent chance of planet being generated
 	private static final float PLANET_ODD = 0.325f;
 	//Noise
@@ -49,6 +50,12 @@ public class SolarSystemGenerator implements WorldGenerator {
 		final int originX = chunkX << Chunk.BLOCKS.BITS;
 		final int originY = chunkY << Chunk.BLOCKS.BITS;
 		final int originZ = chunkZ << Chunk.BLOCKS.BITS;
+
+		//Check if chunk distance is greater than the maximum SolarSystem size
+		if (originX * originX + originY * originY + originZ * originZ > SolarSystem.MAX_SYSTEM_SIZE * SolarSystem.MAX_SYSTEM_SIZE * 16) {
+			return;
+		}
+
 		// Size of the buffer in world space
 		final Vector3 size = blockData.getSize();
 		final int sizeX = size.getFloorX();
@@ -109,6 +116,8 @@ public class SolarSystemGenerator implements WorldGenerator {
 						final double noiseValue = noise[dx][dy][dz] + 0.375;
 						if (noiseValue >= 0) {
 							blockData.set(x, y, z, CubiverseMaterials.MOLTEN_ROCK);
+						} else {
+							blockData.set(x, y, z, CubiverseMaterials.STAR);
 						}
 					}
 				}
