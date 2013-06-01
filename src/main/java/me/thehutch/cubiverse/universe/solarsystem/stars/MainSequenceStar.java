@@ -1,17 +1,15 @@
 package me.thehutch.cubiverse.universe.solarsystem.stars;
-
 /**
  * @author thehutch
  */
 public class MainSequenceStar extends Star {
 
-	@Override
-	public void onAttached() {
-		super.onAttached();
-		this.setName("Main Sequence Star");
-		this.setRadius(196);
-		this.setLifespan(DEFAULT_LIFESPAN);
-		this.setSurfaceTemperature(DEFAULT_SURFACE_TERMPATURE);
+	public MainSequenceStar() {
+		this(DEFAULT_NAME + "_MAIN_SEQUENCE");
+	}
+
+	public MainSequenceStar(String name) {
+		super(name, DEFAULT_RADIUS, DEFAULT_LIFESPAN, 5800);
 	}
 
 	@Override

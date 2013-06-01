@@ -5,17 +5,29 @@ package me.thehutch.cubiverse.universe.solarsystem.stars;
  */
 public class WhiteDwarf extends Star {
 
-	@Override
-	public void onAttached() {
-		super.onAttached();
-		this.setName("White Dwarf");
-		this.setRadius(24);
-		this.setLifespan(DEFAULT_LIFESPAN * 24);
-		this.setSurfaceTemperature(25000);
+	private static final double COOLING_RATE = 0.05;
+	private static final double TRANSITION_TEMPERATURE = 1500.0;
+
+	public WhiteDwarf() {
+		this(DEFAULT_NAME + "_WHITE_DWARF");
+	}
+
+	public WhiteDwarf(String name) {
+		super(name, DEFAULT_RADIUS / 8, DEFAULT_LIFESPAN * 24, 25000);
 	}
 
 	@Override
 	public Class<? extends Star> getNextStageStar() {
 		return null; //TODO: Black Dwarf
+	}
+
+	@Override
+	public void onTick(float dt) {
+		super.onTick(dt);
+		if (getSurfaceTemperature() <= TRANSITION_TEMPERATURE) {
+			//Transform to Black Dwarf
+		} else {
+			this.setSurfaceTemperature(getSurfaceTemperature() - COOLING_RATE * dt);
+		}
 	}
 }

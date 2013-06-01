@@ -1,54 +1,51 @@
 package me.thehutch.cubiverse.universe.solarsystem.planets;
 
 import me.thehutch.cubiverse.data.Climate;
-import me.thehutch.cubiverse.universe.SpaceComponent;
+import me.thehutch.cubiverse.universe.SpaceObject;
 
 /**
  * @author thehutch
  */
-public class Planet extends SpaceComponent {
+public final class Planet extends SpaceObject {
 
 	//Defaults
+	public static final int DEFAULT_ROTATION_TIME = 24000;
 	public static final Climate DEFAULT_CLIMATE = Climate.NORMAL;
-	public static final int DEFAULT_ROTATION_TIME = 24000; //20 minutes
 	//Planet Data
-	private double distanceToStar;
-	private int rotationTime;
-	private Climate climate;
+	private final double distanceToStar;
+	private final int rotationTime;
+	private final Climate climate;
 
-	@Override
-	public void onAttached() {
-		super.onAttached();
-		this.setName(DEFAULT_NAME + " PLANET");
-		this.setClimate(DEFAULT_CLIMATE);
-		this.setRotationTime(DEFAULT_ROTATION_TIME);
-		this.setDistanceToStar(-1);
+	public Planet(String name, int radius, double distanceToStar) {
+		this(name, radius, distanceToStar, DEFAULT_ROTATION_TIME);
 	}
 
-	public final double getDistanceToStar() {
+	public Planet(String name, int radius, double distanceToStar, int rotationTime) {
+		super(name, radius);
+		this.distanceToStar = distanceToStar;
+		this.rotationTime = rotationTime;
+		this.climate = Climate.getClimateFromPlanetDistance(distanceToStar);
+	}
+
+	public double getDistanceToStar() {
 		return distanceToStar;
 	}
 
-	public final Planet setDistanceToStar(double distanceToStar) {
-		this.distanceToStar = distanceToStar;
-		return this;
-	}
-
-	public final int getRotationTime() {
+	public int getRotationTime() {
 		return rotationTime;
 	}
 
-	public final Planet setRotationTime(int rotationTime) {
-		this.rotationTime = rotationTime;
-		return this;
-	}
-
-	public final Climate getClimate() {
+	public Climate getClimate() {
 		return climate;
 	}
 
-	public final Planet setClimate(Climate climate) {
-		this.climate = climate;
-		return this;
+	@Override
+	public String toString() {
+		return String.format("Name: %s | Radius: %s | Climate: %s | Rotation Time: %s", getName(), getRadius(), getClimate().name(), getRotationTime());
+	}
+
+	@Override
+	public void onTick(float dt) {
+
 	}
 }

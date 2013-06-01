@@ -1,6 +1,8 @@
 package me.thehutch.cubiverse.universe.solarsystem;
 
 import gnu.trove.map.hash.THashMap;
+import java.util.Collection;
+import java.util.Set;
 import me.thehutch.cubiverse.universe.solarsystem.planets.Planet;
 import me.thehutch.cubiverse.universe.solarsystem.stars.MainSequenceStar;
 import me.thehutch.cubiverse.universe.solarsystem.stars.Star;
@@ -10,57 +12,69 @@ import org.spout.api.math.Vector3;
 /**
  * @author thehutch
  */
-public class SolarSystem extends WorldComponent {
+public final class SolarSystem extends WorldComponent {
 
 	//Defaults
 	public static final String DEFAULT_SOLAR_SYSTEM_NAME = "DEFAULT_SOLAR_SYSTEM";
-	public static final Class<? extends Star> DEFAULT_STAR = MainSequenceStar.class;
+	public static final Star DEFAULT_STAR = new MainSequenceStar("Sun");
+	//Maximum radius in chunks a solar system can be
+	public static final double MAX_SYSTEM_SIZE = 8192.0;
 	//Planets in the solar system
 	private THashMap<Vector3, Planet> planets;
+	//System star
+	private Star star;
 
 	@Override
 	public void onAttached() {
-		planets = new THashMap<>();
-		if (getOwner().getType(Star.class) == null) {
-			getOwner().add(DEFAULT_STAR);
+		this.planets = new THashMap<>();
+		if (getStar() == null) {
+			setStar(DEFAULT_STAR);
 		}
 	}
 
-	public int getNumOfPlanets() {
-		return planets.size();
-	}
-
 	public Star getStar() {
-		return getOwner().get(Star.class);
+		return star;
 	}
 
-	public void setStar(Class<? extends Star> star) {
-		getOwner().detach(Star.class);
-		getOwner().add(star);
+	public SolarSystem setStar(Star star) {
+		this.star = star;
+		return this;
 	}
 
-	public Planet getPlanet(Vector3 location) {
-		return planets.get(location);
+	public Planet getPlanetAt(Vector3 vec) {
+		return planets.get(vec);
 	}
 
-	public THashMap<Vector3, Planet> getPlanets() {
-		return planets;
+	public Collection<Planet> getPlanets() {
+		return planets.values();
+	}
+
+	public Set<Vector3> getPlanetLocations() {
+		return planets.keySet();
 	}
 
 	public Planet getClosestPlanet(Vector3 pos) {
-		return getClosestPlanet(pos, Double.MAX_VALUE);
+		return getClosestPlanet(pos, MAX_SYSTEM_SIZE);
 	}
 
-	public Planet getClosestPlanet(Vector3 pos, double maxDistance) {
+	public Planet getClosestPlanet(Vector3 pos, double range) {
 		Vector3 closestVector = null;
-		double closestDistance = Double.MAX_VALUE;
-		for (Vector3 vec : planets.keySet()) {
+		double closestDistance = range;
+		for(Vector3 vec : getPlanetLocations()) {
 			double distance = pos.distanceSquared(vec);
-			if (distance < closestDistance && distance <= maxDistance) {
+			if (distance <= closestDistance * closestDistance) {
 				closestDistance = distance;
 				closestVector = vec;
 			}
 		}
-		return getPlanet(closestVector);
+		return getPlanetAt(closestVector);
+	}
+
+	@Override
+	public void onTick(float dt) {
+		getStar().onTick(dt);
+		for(Planet planet : planets.values()) {
+			planet.onTick(dt);
+		}
 	}
 }
