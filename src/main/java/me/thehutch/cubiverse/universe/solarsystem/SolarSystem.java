@@ -59,10 +59,10 @@ public final class SolarSystem extends WorldComponent {
 
 	public Planet getClosestPlanet(Vector3 pos, double range) {
 		Vector3 closestVector = null;
-		double closestDistance = range;
+		double closestDistance = range * range;
 		for(Vector3 vec : getPlanetLocations()) {
 			double distance = pos.distanceSquared(vec);
-			if (distance <= closestDistance * closestDistance) {
+			if (distance <= closestDistance) {
 				closestDistance = distance;
 				closestVector = vec;
 			}
