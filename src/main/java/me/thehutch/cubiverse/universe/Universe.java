@@ -1,5 +1,6 @@
 package me.thehutch.cubiverse.universe;
 
+import me.thehutch.cubiverse.components.world.SkyComponent;
 import me.thehutch.cubiverse.universe.generator.SolarSystemGenerator;
 import me.thehutch.cubiverse.universe.solarsystem.SolarSystem;
 import org.spout.api.Spout;
@@ -20,6 +21,7 @@ public class Universe {
 		if (Spout.getEngine().getWorld(name) == null) {
 			World newWorld = Spout.getEngine().loadWorld(name, new SolarSystemGenerator());
 			newWorld.add(SolarSystem.class);
+			newWorld.add(SkyComponent.class);
 			return true;
 		}
 		return false;

@@ -10,8 +10,10 @@ public class Planet extends SpaceComponent {
 
 	//Defaults
 	public static final Climate DEFAULT_CLIMATE = Climate.NORMAL;
+	public static final int DEFAULT_ROTATION_TIME = 24000; //20 minutes
 	//Planet Data
 	private double distanceToStar;
+	private int rotationTime;
 	private Climate climate;
 
 	@Override
@@ -19,6 +21,7 @@ public class Planet extends SpaceComponent {
 		super.onAttached();
 		this.setName(DEFAULT_NAME + " PLANET");
 		this.setClimate(DEFAULT_CLIMATE);
+		this.setRotationTime(DEFAULT_ROTATION_TIME);
 		this.setDistanceToStar(-1);
 	}
 
@@ -28,6 +31,15 @@ public class Planet extends SpaceComponent {
 
 	public final Planet setDistanceToStar(double distanceToStar) {
 		this.distanceToStar = distanceToStar;
+		return this;
+	}
+
+	public final int getRotationTime() {
+		return rotationTime;
+	}
+
+	public final Planet setRotationTime(int rotationTime) {
+		this.rotationTime = rotationTime;
 		return this;
 	}
 

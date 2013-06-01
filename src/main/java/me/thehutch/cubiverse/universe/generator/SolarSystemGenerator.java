@@ -1,14 +1,15 @@
 package me.thehutch.cubiverse.universe.generator;
 
 import java.util.Random;
-import me.thehutch.cubiverse.CubiversePlugin;
 import me.thehutch.cubiverse.materials.CubiverseMaterials;
-import org.spout.api.chat.ChatArguments;
-import org.spout.api.chat.style.ChatStyle;
+import net.royawesome.jlibnoise.NoiseQuality;
+import net.royawesome.jlibnoise.module.source.Perlin;
 import org.spout.api.generator.Populator;
 import org.spout.api.generator.WorldGenerator;
+import org.spout.api.generator.WorldGeneratorUtils;
 import org.spout.api.geo.World;
 import org.spout.api.geo.cuboid.Chunk;
+import org.spout.api.math.GenericMath;
 import org.spout.api.math.Vector3;
 import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
 
@@ -17,62 +18,102 @@ import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
  */
 public class SolarSystemGenerator implements WorldGenerator {
 
-	private static final int CELL_SIZE = 8 * 16;
-	private static final int MAX_PLANET_SIZE = CELL_SIZE / 2;
-	private static final int MIN_PLANET_SIZE = CELL_SIZE / 4;
-	private static final Random rand = new Random();
+	//Cell size (8 chunks)
+	private static final int CELL_SIZE = 16 * 16;
+	//Maximum planet radius
+	private static final int MAX_PLANET_RADIUS = CELL_SIZE / 2;
+	//Minimum planet radius
+	private static final int MIN_PLANET_RADIUS = CELL_SIZE / 4;
+	//Percent chance of planet being generated
+	private static final float PLANET_ODD = 0.325f;
+	//Noise
+	private static final Perlin PERLIN = new Perlin();
+
+	static {
+		PERLIN.setFrequency(0.2f);
+		PERLIN.setLacunarity(2);
+		PERLIN.setOctaveCount(8);
+		PERLIN.setPersistence(0.2);
+		PERLIN.setNoiseQuality(NoiseQuality.BEST);
+	}
 
 	@Override
 	public void generate(CuboidBlockMaterialBuffer blockData, int chunkX, int chunkY, int chunkZ, World world) {
-		ChatArguments message = new ChatArguments(ChatStyle.DARK_RED, "\n====================================\n", ChatStyle.BLUE);
+		// Random number generator
+		final Random random = new Random();
+		// World seed
+		final long seed = world.getSeed();
+		PERLIN.setSeed((int) seed);
 
-		Vector3 chunkPos = new Vector3(chunkX, chunkY, chunkZ).multiply(16);
-		message.append("Chunk Position: ", chunkPos, "\n");
+		// Base (origin) of the buffer in world space
+		final int originX = chunkX << Chunk.BLOCKS.BITS;
+		final int originY = chunkY << Chunk.BLOCKS.BITS;
+		final int originZ = chunkZ << Chunk.BLOCKS.BITS;
+		// Size of the buffer in world space
+		final Vector3 size = blockData.getSize();
+		final int sizeX = size.getFloorX();
+		final int sizeY = size.getFloorY();
+		final int sizeZ = size.getFloorZ();
+		//Generate noise
+		double[][][] noise = WorldGeneratorUtils.fastNoise(PERLIN, sizeX, sizeY, sizeZ, 4, chunkX, chunkY, chunkZ);
 
-		Vector3 cellPos = chunkPos.divide(CELL_SIZE);
-		message.append("Cell Position: ", cellPos, "\n");
+		// Iterate over all of the blocks in the buffer
+		for (int dx = 0; dx < sizeX; dx++) {
+			final int x = originX + dx;
+			final float cellX = x / (float) CELL_SIZE;
+			final int cellOriginX = GenericMath.floor(cellX);
+			final float cellCenterX = (cellOriginX + 0.5f) * CELL_SIZE;
 
-		Vector3 cellFlooredPos = cellPos.floor();
-		message.append("Cell Floored Position: ", cellFlooredPos, "\n");
+			for (int dy = 0; dy < sizeY; dy++) {
+				final int y = originY + dy;
+				final float cellY = y / (float) CELL_SIZE;
+				final int cellOriginY = GenericMath.floor(cellY);
+				final float cellCenterY = (cellOriginY + 0.5f) * CELL_SIZE;
 
-		Vector3 cellLocalVector = cellPos.subtract(cellFlooredPos);
-		message.append("Cell Location Vector: ", cellLocalVector, "\n");
+				for (int dz = 0; dz < sizeZ; dz++) {
+					final int z = originZ + dz;
+					final float cellZ = z / (float) CELL_SIZE;
+					final int cellOriginZ = GenericMath.floor(cellZ);
+					final float cellCenterZ = (cellOriginZ + 0.5f) * CELL_SIZE;
 
-		Vector3 cellCenterWorldSpace = cellLocalVector.add(0.5f, 0.5f, 0.5f).multiply(CELL_SIZE);
-		message.append("Cell Centered In World Space: ", cellCenterWorldSpace, "\n");
+					// Seed the random from the hash of the world coordinates of the center of the cell and world seed
+					final long hash = (long) cellCenterX * 7919 ^ (long) cellCenterY * 7901 ^ (long) cellCenterZ * 7907 ^ seed * 7883;
+					random.setSeed(hash * (hash + 101));
+					if (random.nextFloat() > PLANET_ODD) {
+						continue;
+					}
 
+					// Radius of the planet
+					final int radius = random.nextInt(MAX_PLANET_RADIUS - MIN_PLANET_RADIUS + 1) + MIN_PLANET_RADIUS;
 
-		long hash = ((long) cellCenterWorldSpace.getX()) * (7919 ^ (long) cellCenterWorldSpace.getY() * 7901) ^ ((long) cellCenterWorldSpace.getZ() * 7907);
-		hash *= hash + 101;
-		message.append("Hash: ", hash, "\n");
+					// Max offset the planet center can have before overlapping on adjacent cells
+					final int maxOffset = CELL_SIZE / 2 - radius;
+					// Offsets from the cell center for the planet center
+					final int offsetX = random.nextInt(maxOffset * 2 + 1) - maxOffset;
+					final int offsetY = random.nextInt(maxOffset * 2 + 1) - maxOffset;
+					final int offsetZ = random.nextInt(maxOffset * 2 + 1) - maxOffset;
+					// Planet center coordinates in world space
+					final float planetX = cellCenterX + offsetX;
+					final float planetY = cellCenterY + offsetY;
+					final float planetZ = cellCenterZ + offsetZ;
+					// Distance between the current block and the planet center
+					final float planetBlockDX = planetX - x;
+					final float planetBlockDY = planetY - y;
+					final float planetBlockDZ = planetZ - z;
+					// Verify that the current block coordinates are inside the planet
+					double distance = planetBlockDX * planetBlockDX + planetBlockDY * planetBlockDY + planetBlockDZ * planetBlockDZ;
 
-		rand.setSeed(hash);
-		double rDouble = rand.nextDouble();
-		message.append("Random Double: ", rDouble, "\n");
-		if (rDouble > 0.5) {
-			int xAxis = rand.nextInt(CELL_SIZE) - MAX_PLANET_SIZE;
-			int yAxis = rand.nextInt(CELL_SIZE) - MAX_PLANET_SIZE;
-			int zAxis = rand.nextInt(CELL_SIZE) - MAX_PLANET_SIZE;
-			message.append("XYZ offsets: [", xAxis, ",", yAxis, ",", zAxis, "]\n");
-
-			int radius = rand.nextInt(MAX_PLANET_SIZE - MIN_PLANET_SIZE) + MIN_PLANET_SIZE;
-			message.append("Planet Radius: ", radius, "\n");
-
-			Vector3 planetCenter = cellCenterWorldSpace.add(xAxis, yAxis, zAxis);
-			message.append("Planet Center: ", planetCenter, "\n");
-
-			Vector3 distanceVec = chunkPos.subtract(planetCenter.divide(16));
-			message.append("Distance Vector: ", distanceVec, "\n");
-			message.append("Distance Squared: ", distanceVec.lengthSquared(), "\n");
-			message.append("Radius Squared: ", radius * radius, "\n");
-
-			if (distanceVec.lengthSquared() < radius * radius) {
-				message.append(ChatStyle.GOLD, "Planet chunk generated at ", chunkPos.toString(), "\n");
-				blockData.flood(CubiverseMaterials.MOLTEN_ROCK);
+					if (distance < radius) {
+						blockData.set(x, y, z, CubiverseMaterials.STAR);
+					} else if (distance <= (radius * radius)) {
+						final double noiseValue = noise[dx][dy][dz] + 0.375;
+						if (noiseValue >= 0) {
+							blockData.set(x, y, z, CubiverseMaterials.MOLTEN_ROCK);
+						}
+					}
+				}
 			}
 		}
-		message.append(ChatStyle.DARK_RED, "====================================\n");
-		CubiversePlugin.getInstance().getLogger().info(message.asString());
 	}
 
 	@Override

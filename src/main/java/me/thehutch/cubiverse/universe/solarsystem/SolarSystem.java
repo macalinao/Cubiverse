@@ -1,9 +1,9 @@
 package me.thehutch.cubiverse.universe.solarsystem;
 
-import me.thehutch.cubiverse.universe.solarsystem.stars.Star;
 import gnu.trove.map.hash.THashMap;
 import me.thehutch.cubiverse.universe.solarsystem.planets.Planet;
 import me.thehutch.cubiverse.universe.solarsystem.stars.MainSequenceStar;
+import me.thehutch.cubiverse.universe.solarsystem.stars.Star;
 import org.spout.api.component.type.WorldComponent;
 import org.spout.api.math.Vector3;
 
@@ -15,17 +15,15 @@ public class SolarSystem extends WorldComponent {
 	//Defaults
 	public static final String DEFAULT_SOLAR_SYSTEM_NAME = "DEFAULT_SOLAR_SYSTEM";
 	public static final Class<? extends Star> DEFAULT_STAR = MainSequenceStar.class;
-	//2 ^ 16 chunks
-	public static final int SYSTEM_RADIUS = 65536;
-	//The minimum chunk distance between planets
-	private static final int MIN_DISTANCE = 16;
 	//Planets in the solar system
 	private THashMap<Vector3, Planet> planets;
 
 	@Override
 	public void onAttached() {
 		planets = new THashMap<>();
-		getOwner().add(MainSequenceStar.class);
+		if (getOwner().getType(Star.class) == null) {
+			getOwner().add(DEFAULT_STAR);
+		}
 	}
 
 	public int getNumOfPlanets() {
@@ -49,16 +47,20 @@ public class SolarSystem extends WorldComponent {
 		return planets;
 	}
 
-	/*
-	 public boolean createPlanet(String name, int radius, Vector3 location) {
-	 double distanceToStar = location.lengthSquared() - getStar().getRadius() - radius;
-	 if (distanceToStar > MIN_DISTANCE) {
-	 Planet planet = new Planet(name, radius, distanceToStar, Climate.NORMAL);
-	 planets.put(location, planet);
-	 System.out.println("New planet '" + name + "' created at " + location.toString() +
-	 " with a distance of " + distanceToStar + " from the system star");
-	 return true;
-	 }
-	 return false;
-	 }*/
+	public Planet getClosestPlanet(Vector3 pos) {
+		return getClosestPlanet(pos, Double.MAX_VALUE);
+	}
+
+	public Planet getClosestPlanet(Vector3 pos, double maxDistance) {
+		Vector3 closestVector = null;
+		double closestDistance = Double.MAX_VALUE;
+		for (Vector3 vec : planets.keySet()) {
+			double distance = pos.distanceSquared(vec);
+			if (distance < closestDistance && distance <= maxDistance) {
+				closestDistance = distance;
+				closestVector = vec;
+			}
+		}
+		return getPlanet(closestVector);
+	}
 }
