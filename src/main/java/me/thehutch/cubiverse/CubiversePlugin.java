@@ -12,17 +12,18 @@ public class CubiversePlugin extends CommonPlugin {
 
 	@Override
 	public void onLoad() {
-		instance = this;
 		((PluginLogger) getLogger()).setTag(new ChatArguments(ChatStyle.RESET, "[", ChatStyle.DARK_CYAN, "Cubiverse", ChatStyle.RESET, "] "));
 		getLogger().info("loaded");
 	}
 
 	@Override
 	public void onEnable() {
+		instance = this;
+
+		//Events
 		getEngine().getEventManager().registerEvents(new CubiverseListener(this), this);
 
 		Universe.createNewSolarSystem("HelloCubiverse");
-
 		getLogger().info("enabled");
 	}
 
