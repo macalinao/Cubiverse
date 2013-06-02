@@ -11,8 +11,10 @@ public class Utils {
 	 * Converts the wavelength given in nanometers to a colour of visible light.<br><br>
 	 * Wavelengths outside of the visible spectrum return black
 	 *
-	 * @param wavelength Nanomater wavelength between 380nm (inclusive) and 780nm (exclusive)
+	 * @param wavelength
+	 *			Nanomater wavelength between 380nm (inclusive) and 780nm (exclusive)
 	 * @return
+	 *			Colour of the wavelength in RGB
 	 */
 	public static Color convertWavelengthToRGB(float wavelength) {
 		if (wavelength < 380) {
@@ -40,11 +42,14 @@ public class Utils {
 	}
 
 	/**
-	 * Flux = Luminosity ---------- 4πd²
+	 * F = L / 4πd²
 	 *
 	 * @param luminosity
+	 *			Luminosity of the star
 	 * @param distance
+	 *			Distance from the star
 	 * @return
+	 *			Light intensity (Flux)
 	 */
 	public static double calculateLightIntensity(double luminosity, double distance) {
 		return luminosity / (4 * Math.PI * (distance * distance));
