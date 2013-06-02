@@ -1,12 +1,13 @@
 package me.thehutch.cubiverse.universe.solarsystem;
 
 import gnu.trove.map.hash.THashMap;
-import java.util.Collection;
 import java.util.Set;
 import me.thehutch.cubiverse.universe.solarsystem.planets.Planet;
 import me.thehutch.cubiverse.universe.solarsystem.stars.MainSequenceStar;
 import me.thehutch.cubiverse.universe.solarsystem.stars.Star;
 import org.spout.api.component.type.WorldComponent;
+import org.spout.api.map.DefaultedKey;
+import org.spout.api.map.DefaultedKeyImpl;
 import org.spout.api.math.Vector3;
 
 /**
@@ -14,56 +15,43 @@ import org.spout.api.math.Vector3;
  */
 public final class SolarSystem extends WorldComponent {
 
-	//Defaults
-	public static final String DEFAULT_SOLAR_SYSTEM_NAME = "DEFAULT_SOLAR_SYSTEM";
-	public static final Star DEFAULT_STAR = new MainSequenceStar("Sun");
+	//Data Keys
+	public static final DefaultedKey<? extends Star> SOLAR_SYSTEM_STAR = new DefaultedKeyImpl<>("SystemStar", new MainSequenceStar());
+	public static final DefaultedKey<THashMap<Vector3, Planet>> SOLAR_SYSTEM_PLANETS = new DefaultedKeyImpl<>("SystemPlanets", new THashMap<Vector3, Planet>());
 	//Maximum radius in chunks a solar system can be
 	public static final double MAX_SYSTEM_SIZE = 8192.0;
-	//Planets in the solar system
-	private THashMap<Vector3, Planet> planets;
-	//System star
-	private Star star;
 
-	@Override
-	public void onAttached() {
-		this.planets = new THashMap<>();
-		if (getStar() == null) {
-			setStar(DEFAULT_STAR);
-		}
+	public String getName() {
+		return getOwner().getName();
 	}
 
 	public Star getStar() {
-		return star;
+		return getData().get(SOLAR_SYSTEM_STAR);
 	}
 
-	public SolarSystem setStar(Star star) {
-		this.star = star;
-		return this;
+	public Planet getPlanetAt(Vector3 pos) {
+		return getPlanets().get(pos);
 	}
 
-	public Planet getPlanetAt(Vector3 vec) {
-		return planets.get(vec);
-	}
-
-	public Collection<Planet> getPlanets() {
-		return planets.values();
+	public THashMap<Vector3, Planet> getPlanets() {
+		return getData().get(SOLAR_SYSTEM_PLANETS);
 	}
 
 	public Set<Vector3> getPlanetLocations() {
-		return planets.keySet();
+		return getPlanets().keySet();
 	}
-
+	
 	public Planet getClosestPlanet(Vector3 pos) {
 		return getClosestPlanet(pos, MAX_SYSTEM_SIZE);
 	}
 
 	public Planet getClosestPlanet(Vector3 pos, double range) {
 		Vector3 closestVector = null;
-		double closestDistance = range * range;
+		range *= range;
 		for (Vector3 vec : getPlanetLocations()) {
 			double distance = pos.distanceSquared(vec);
-			if (distance <= closestDistance) {
-				closestDistance = distance;
+			if (distance <= range) {
+				range = distance;
 				closestVector = vec;
 			}
 		}
@@ -72,9 +60,9 @@ public final class SolarSystem extends WorldComponent {
 
 	@Override
 	public void onTick(float dt) {
-		getStar().onTick(dt);
-		for (Planet planet : planets.values()) {
-			planet.onTick(dt);
+		getStar().tick(dt);
+		for (Planet planet : getPlanets().values()) {
+			planet.tick(dt);
 		}
 	}
 

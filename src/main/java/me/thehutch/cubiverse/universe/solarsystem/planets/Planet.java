@@ -40,11 +40,12 @@ public final class Planet extends SpaceObject {
 	}
 
 	@Override
-	public String toString() {
-		return String.format("Name: %s | Radius: %s | Climate: %s | Rotation Time: %s", getName(), getRadius(), getClimate().name(), getRotationTime());
+	public void onTick(float dt) {
+		
 	}
 
 	@Override
-	public void onTick(float dt) {
+	public String toString() {
+		return String.format("Name: %s | Radius: %s | Climate: %s | Rotation Time: %s", getName(), getRadius(), getClimate().name(), getRotationTime());
 	}
 }
