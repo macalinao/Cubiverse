@@ -23,7 +23,7 @@ public abstract class Star extends SpaceObject {
 	public Star() {
 		this(DEFAULT_NAME + "_STAR", DEFAULT_RADIUS * 2);
 	}
-	
+
 	public Star(String name, int radius) {
 		this(name, radius, DEFAULT_SURFACE_TERMPATURE, DEFAULT_LIFESPAN);
 	}

@@ -46,6 +46,5 @@ public final class Planet extends SpaceObject {
 
 	@Override
 	public void onTick(float dt) {
-
 	}
 }

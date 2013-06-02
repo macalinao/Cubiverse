@@ -8,12 +8,16 @@ import org.spout.api.tickable.BasicTickable;
  */
 public abstract class SpaceObject extends BasicTickable implements Serializable {
 
+	//Serializer
+	public static final long serialVersionUID = 1L;
 	//Defaults
 	public static final String DEFAULT_NAME = "DEFAULT";
 	public static final int DEFAULT_RADIUS = 64;
 	//SpaceComponent Data
 	private final String name;
 	private final int radius;
+	//Mass
+	private double mass;
 
 	public SpaceObject(String name, int radius) {
 		if (name == null || name.isEmpty()) {
@@ -24,6 +28,7 @@ public abstract class SpaceObject extends BasicTickable implements Serializable 
 		}
 		this.name = name;
 		this.radius = radius;
+		this.mass = 0;
 	}
 
 	public final String getName() {
@@ -32,6 +37,18 @@ public abstract class SpaceObject extends BasicTickable implements Serializable 
 
 	public final int getRadius() {
 		return radius;
+	}
+
+	public final double getMass() {
+		return mass;
+	}
+
+	public final void addMass(double amount) {
+		this.mass += amount;
+	}
+
+	public final void removeMass(double amount) {
+		this.mass -= amount;
 	}
 
 	@Override

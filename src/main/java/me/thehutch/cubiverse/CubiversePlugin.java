@@ -19,7 +19,7 @@ public class CubiversePlugin extends CommonPlugin {
 		//Events
 		getEngine().getEventManager().registerEvents(new CubiverseListener(this), this);
 
-		Universe.createNewSolarSystem("HelloCubiverse");
+		Universe.createNewSolarSystem("Sol");
 		getLogger().info("enabled");
 	}
 

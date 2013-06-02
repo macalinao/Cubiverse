@@ -19,23 +19,23 @@ import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
  */
 public class SolarSystemGenerator implements WorldGenerator {
 
-	//Cell size (32 chunks)
-	private static final int CELL_SIZE = 32 * 16;
+	//Cell size (24 chunks)
+	private static final int CELL_SIZE = 16 * 16;
 	//Maximum star radius
-	private static final int MAX_STAR_RADIUS = CELL_SIZE / 2;
+	//private static final int MAX_STAR_RADIUS = CELL_SIZE / 2;
 	//Minimum star radius
-	private static final int MIN_STAR_RADIUS = CELL_SIZE / 4;
+	//private static final int MIN_STAR_RADIUS = CELL_SIZE / 4;
 	//Maximum planet radius
-	private static final int MAX_PLANET_RADIUS = CELL_SIZE / 8;
+	private static final int MAX_PLANET_RADIUS = CELL_SIZE / 2;
 	//Minimum planet radius
-	private static final int MIN_PLANET_RADIUS = CELL_SIZE / 16;
+	private static final int MIN_PLANET_RADIUS = CELL_SIZE / 4;
 	//Percent chance of planet being generated
-	private static final float PLANET_ODD = 0.35f;
+	private static final float PLANET_ODD = 0.5f;
 	//Noise
 	private static final Perlin PERLIN = new Perlin();
 
 	static {
-		PERLIN.setFrequency(0.25f);
+		PERLIN.setFrequency(0.2f);
 		PERLIN.setLacunarity(2);
 		PERLIN.setOctaveCount(8);
 		PERLIN.setPersistence(0.2);
@@ -91,52 +91,37 @@ public class SolarSystemGenerator implements WorldGenerator {
 					final long hash = (long) cellCenterX * 7919 ^ (long) cellCenterY * 7901 ^ (long) cellCenterZ * 7907 ^ seed * 7883;
 					random.setSeed(hash * (hash + 101));
 
-					if (cellOriginX == 0 && cellOriginY == 0 && cellOriginZ == 0) {
-						//Generate Star
-						final int radius = random.nextInt(MAX_STAR_RADIUS - MIN_STAR_RADIUS + 1) + MIN_STAR_RADIUS;
+					//Generate planet
+					if (random.nextFloat() > PLANET_ODD) {
+						continue;
+					}
+					// Radius of the planet
+					final int radius = random.nextInt(MAX_PLANET_RADIUS - MIN_PLANET_RADIUS + 1) + MIN_PLANET_RADIUS;
 
-						final float starBlockDX = cellCenterX - x;
-						final float starBlockDY = cellCenterY - y;
-						final float starBlockDZ = cellCenterZ - z;
+					// Max offset the planet center can have before overlapping on adjacent cells
+					final int maxOffset = CELL_SIZE / 2 - radius;
+					// Offsets from the cell center for the planet center
+					final int offsetX = random.nextInt(maxOffset * 2 + 1) - maxOffset;
+					final int offsetY = random.nextInt(maxOffset * 2 + 1) - maxOffset;
+					final int offsetZ = random.nextInt(maxOffset * 2 + 1) - maxOffset;
+					// Planet center coordinates in world space
+					final float planetX = cellCenterX + offsetX;
+					final float planetY = cellCenterY + offsetY;
+					final float planetZ = cellCenterZ + offsetZ;
 
-						if (starBlockDX * starBlockDX + starBlockDY * starBlockDY + starBlockDZ * starBlockDZ <= radius * radius) {
-							blockData.set(x, y, z, CubiverseMaterials.STAR);
-						}
-					} else {
-						//Generate planet
-						if (random.nextFloat() > PLANET_ODD) {
-							continue;
-						}
-						// Radius of the planet
-						final int radius = random.nextInt(MAX_PLANET_RADIUS - MIN_PLANET_RADIUS + 1) + MIN_PLANET_RADIUS;
+					// Distance between the current block and the planet center
+					final float planetBlockDX = planetX - x;
+					final float planetBlockDY = planetY - y;
+					final float planetBlockDZ = planetZ - z;
+					// Verify that the current block coordinates are inside the planet
+					double distance = planetBlockDX * planetBlockDX + planetBlockDY * planetBlockDY + planetBlockDZ * planetBlockDZ;
 
-						// Max offset the planet center can have before overlapping on adjacent cells
-						final int maxOffset = CELL_SIZE / 2 - radius;
-						// Offsets from the cell center for the planet center
-						final int offsetX = random.nextInt(maxOffset * 2 + 1) - maxOffset;
-						final int offsetY = random.nextInt(maxOffset * 2 + 1) - maxOffset;
-						final int offsetZ = random.nextInt(maxOffset * 2 + 1) - maxOffset;
-						// Planet center coordinates in world space
-						final float planetX = cellCenterX + offsetX;
-						final float planetY = cellCenterY + offsetY;
-						final float planetZ = cellCenterZ + offsetZ;
-
-						// Distance between the current block and the planet center
-						final float planetBlockDX = planetX - x;
-						final float planetBlockDY = planetY - y;
-						final float planetBlockDZ = planetZ - z;
-						// Verify that the current block coordinates are inside the planet
-						double distance = planetBlockDX * planetBlockDX + planetBlockDY * planetBlockDY + planetBlockDZ * planetBlockDZ;
-
-						if (distance < radius) {
-							blockData.set(x, y, z, CubiverseMaterials.STAR);
-						} else if (distance <= radius * radius) {
-							final double noiseValue = noise[dx][dy][dz] + 0.35;
-							if (noiseValue >= 0) {
-								blockData.set(x, y, z, CubiverseMaterials.MOLTEN_ROCK);
-							} else {
-								blockData.set(x, y, z, CubiverseMaterials.STAR);
-							}
+					if (distance <= radius * radius) {
+						final double noiseValue = noise[dx][dy][dz] + random.nextDouble() - 0.25;
+						if (noiseValue > 0) {
+							blockData.set(x, y, z, CubiverseMaterials.MOLTEN_ROCK);
+						} else {
+							blockData.set(x, y, z, CubiverseMaterials.STAR_BLOCK);
 						}
 					}
 				}

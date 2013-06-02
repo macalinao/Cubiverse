@@ -1,7 +1,8 @@
 package me.thehutch.cubiverse.materials;
 
-import org.spout.api.material.BlockMaterial;
-import org.spout.api.material.basic.BasicSolid;
+import me.thehutch.cubiverse.materials.blocks.IceRock;
+import me.thehutch.cubiverse.materials.blocks.MoltenRock;
+import me.thehutch.cubiverse.materials.blocks.StarBlock;
 
 /**
  * @author thehutch
@@ -9,7 +10,8 @@ import org.spout.api.material.basic.BasicSolid;
 public class CubiverseMaterials {
 
 	//Planet Rocks
-	public static final BlockMaterial MOLTEN_ROCK = new BasicSolid("Molten Rock", "model://Cubiverse/materials/blocks/moltenrock/moltenrock.spm");
+	public static final CubiverseBlockMaterial MOLTEN_ROCK = new MoltenRock();
+	public static final CubiverseBlockMaterial ICE_ROCK = new IceRock();
 	//Star Blocks
-	public static final BlockMaterial STAR = new BasicSolid("Star", "model://Cubiverse/materials/blocks/sun/sun.spm");
+	public static final CubiverseBlockMaterial STAR_BLOCK = new StarBlock();
 }

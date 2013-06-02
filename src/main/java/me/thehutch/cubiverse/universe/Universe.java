@@ -11,9 +11,6 @@ import org.spout.api.geo.World;
  */
 public class Universe {
 
-	//Universal Gravitational Constant
-	public static final float GRAV_CONST = 0.05f;
-
 	private Universe() {
 	}
 
