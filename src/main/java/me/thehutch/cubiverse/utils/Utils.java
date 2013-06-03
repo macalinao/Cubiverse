@@ -1,6 +1,7 @@
 package me.thehutch.cubiverse.utils;
 
 import java.awt.Color;
+import static me.thehutch.cubiverse.components.entity.GravityComponent.GRAV_CONST;
 
 /**
  * @author thehutch
@@ -42,8 +43,10 @@ public class Utils {
 	}
 
 	/**
-	 * F = L / 4πd²
+	 * Calculate the light intensity using the formula:
 	 *
+	 * F = L / 4πd²
+	 * 
 	 * @param luminosity
 	 *			Luminosity of the star
 	 * @param distance
@@ -53,5 +56,21 @@ public class Utils {
 	 */
 	public static double calculateLightIntensity(double luminosity, double distance) {
 		return luminosity / (4 * Math.PI * (distance * distance));
+	}
+
+	/**
+	 * Calculate the gravitational force between an entity and planet
+	 *
+	 * @param massEntity
+	 *			Mass of the entity
+	 * @param massPlanet
+	 *			Mass of the planet
+	 * @param distance
+	 *			Distance between the two relative to their center of mass
+	 * @return
+	 *			Force (N)
+	 */
+	public static double calculateForce(double massEntity, double massPlanet, double distance) {
+		return (GRAV_CONST * massPlanet * massEntity) / (distance * distance);
 	}
 }

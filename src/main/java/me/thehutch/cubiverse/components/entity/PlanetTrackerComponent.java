@@ -32,9 +32,4 @@ public class PlanetTrackerComponent extends EntityComponent {
 	public Planet getPlanet() {
 		return getDatatable().get(PLANET);
 	}
-
-	@Override
-	public boolean isDetachable() {
-		return false;
-	}
 }

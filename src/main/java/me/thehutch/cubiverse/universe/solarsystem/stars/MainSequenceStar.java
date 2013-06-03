@@ -5,10 +5,6 @@ package me.thehutch.cubiverse.universe.solarsystem.stars;
  */
 public class MainSequenceStar extends Star {
 
-	public MainSequenceStar() {
-		this(DEFAULT_NAME + "_MAIN_SEQUENCE");
-	}
-
 	public MainSequenceStar(String name) {
 		super(name, DEFAULT_RADIUS, DEFAULT_LIFESPAN, 5800);
 	}

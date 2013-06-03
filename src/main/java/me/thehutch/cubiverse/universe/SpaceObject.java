@@ -1,6 +1,7 @@
 package me.thehutch.cubiverse.universe;
 
 import java.io.Serializable;
+import org.spout.api.math.Vector3;
 import org.spout.api.tickable.BasicTickable;
 
 /**
@@ -14,21 +15,23 @@ public abstract class SpaceObject extends BasicTickable implements Serializable 
 	public static final String DEFAULT_NAME = "DEFAULT";
 	public static final int DEFAULT_RADIUS = 64;
 	//SpaceComponent Data
+	private final Vector3 location;
 	private final String name;
 	private final int radius;
 	//Mass
 	private double mass;
 
-	public SpaceObject(String name, int radius) {
+	public SpaceObject(String name, Vector3 location, int radius) {
 		if (name == null || name.isEmpty()) {
 			throw new IllegalArgumentException("Cannot have a null or empty SpaceObject name");
 		}
 		if (radius <= 0) {
 			throw new IllegalArgumentException("Cannot have a radius less than or equal to 0");
 		}
+		this.mass = 0;
 		this.name = name;
 		this.radius = radius;
-		this.mass = 0;
+		this.location = location;
 	}
 
 	public final String getName() {
@@ -37,6 +40,10 @@ public abstract class SpaceObject extends BasicTickable implements Serializable 
 
 	public final int getRadius() {
 		return radius;
+	}
+
+	public final Vector3 getLocation() {
+		return location;
 	}
 
 	public final double getMass() {

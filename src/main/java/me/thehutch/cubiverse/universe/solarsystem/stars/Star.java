@@ -3,6 +3,7 @@ package me.thehutch.cubiverse.universe.solarsystem.stars;
 import java.awt.Color;
 import me.thehutch.cubiverse.universe.SpaceObject;
 import me.thehutch.cubiverse.utils.Utils;
+import org.spout.api.math.Vector3;
 
 /**
  * @author thehutch
@@ -20,16 +21,12 @@ public abstract class Star extends SpaceObject {
 	private double surfaceTemperature;
 	private double luminosity;
 
-	public Star() {
-		this(DEFAULT_NAME + "_STAR", DEFAULT_RADIUS * 2);
-	}
-
 	public Star(String name, int radius) {
 		this(name, radius, DEFAULT_SURFACE_TERMPATURE, DEFAULT_LIFESPAN);
 	}
 
 	public Star(String name, int radius, int surfaceTemperature, long lifespan) {
-		super(name, radius);
+		super(name, new Vector3(0, 0, 0), radius);
 		this.lifespan = lifespan;
 		this.surfaceArea = 4 * Math.PI * radius * radius;
 		this.setSurfaceTemperature(surfaceTemperature);

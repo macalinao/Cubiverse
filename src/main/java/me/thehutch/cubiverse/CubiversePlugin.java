@@ -1,8 +1,6 @@
 package me.thehutch.cubiverse;
 
 import me.thehutch.cubiverse.universe.Universe;
-import org.spout.api.chat.ChatArguments;
-import org.spout.api.chat.style.ChatStyle;
 import org.spout.api.plugin.CommonPlugin;
 import org.spout.api.plugin.PluginLogger;
 
@@ -10,7 +8,7 @@ public class CubiversePlugin extends CommonPlugin {
 
 	@Override
 	public void onLoad() {
-		((PluginLogger) getLogger()).setTag(new ChatArguments(ChatStyle.RESET, "[", ChatStyle.DARK_CYAN, "Cubiverse", ChatStyle.RESET, "] "));
+		((PluginLogger)getLogger()).setTag(null);
 		getLogger().info("loaded");
 	}
 
