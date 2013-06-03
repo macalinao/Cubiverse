@@ -5,4 +5,3 @@ RenderState:
     View: null
 MaterialParams:
     Stars: texture://Cubiverse/terrain/starfield.png
-    BlendColor: color(1,1,1,1)

@@ -24,7 +24,7 @@ public class Universe {
 		if (Spout.getEngine().getWorld(name) == null) {
 			World newWorld = Spout.getEngine().loadWorld(name, new SolarSystemGenerator());
 			newWorld.add(SolarSystem.class);
-			final Model model = Spout.getFileSystem().getResource("model://Cubiverse/materials/sky/sky.spm");
+			final Model model = Spout.getFileSystem().getResource("model://Cubiverse/terrain/sky/skydome.spm");
 			newWorld.add(SkydomeComponent.class).setModel(model);
 			return true;
 		}

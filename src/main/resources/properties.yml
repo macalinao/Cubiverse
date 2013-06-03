@@ -2,7 +2,9 @@ main: me.thehutch.cubiverse.CubiversePlugin
 name: Cubiverse
 version: 1.0.0
 author: thehutch
-description: Inter-Planetry RPG
-
+description:
+    Inter-Stellar RPG beginning with you, a new race which has to climb the technological ladder to
+    reach out of your atmosphere and into your local solar system and then onto the stars in your
+    universe. Can you reach that level before others do?
 load: startup
 platform: ALL

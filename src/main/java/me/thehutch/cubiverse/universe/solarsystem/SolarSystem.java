@@ -59,10 +59,10 @@ public final class SolarSystem extends WorldComponent {
 
 	@Override
 	public void onTick(float dt) {
-		getStar().tick(dt);
-		for (Planet planet : getPlanets()) {
-			planet.tick(dt);
-		}
+		//getStar().tick(dt);
+		//for (Planet planet : getPlanets()) {
+		//	planet.tick(dt);
+		//}
 	}
 
 	@Override
