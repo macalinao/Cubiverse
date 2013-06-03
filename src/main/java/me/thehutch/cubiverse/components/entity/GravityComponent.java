@@ -1,8 +1,6 @@
 package me.thehutch.cubiverse.components.entity;
 
-import me.thehutch.cubiverse.universe.solarsystem.SolarSystem;
-import org.spout.api.component.impl.SceneComponent;
-import org.spout.api.component.type.EntityComponent;
+import org.spout.api.component.entity.EntityComponent;
 
 /**
  * @author thehutch
@@ -30,13 +28,12 @@ public class GravityComponent extends EntityComponent {
 
 	@Override
 	public void onTick(float dt) {
-		SceneComponent sc = getOwner().getScene();
-		PlanetTrackerComponent tracker = getOwner().get(PlanetTrackerComponent.class);
-
-		SolarSystem solarSystem = getOwner().getWorld().get(SolarSystem.class);
+		//TODO
+		//SceneComponent sc = getOwner().getScene();
+		//PlanetTrackerComponent tracker = getOwner().get(PlanetTrackerComponent.class);
+		//SolarSystem solarSystem = getOwner().getWorld().get(SolarSystem.class);
 		//Vector3 forceVector = getOwner().
-
-		double force = GravityComponent.calculateForce(getMass(), tracker.getPlanet().getMass(), 0);
+		//double force = GravityComponent.calculateForce(getMass(), tracker.getPlanet().getMass(), 0);
 	}
 
 	@Override

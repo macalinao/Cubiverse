@@ -24,6 +24,7 @@ public class Universe {
 			World newWorld = Spout.getEngine().loadWorld(name, new SolarSystemGenerator());
 			newWorld.add(SolarSystem.class);
 			newWorld.add(SkyComponent.class);
+			return true;
 		}
 		return false;
 	}

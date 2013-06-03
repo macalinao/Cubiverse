@@ -5,7 +5,7 @@ import java.util.Set;
 import me.thehutch.cubiverse.universe.solarsystem.planets.Planet;
 import me.thehutch.cubiverse.universe.solarsystem.stars.MainSequenceStar;
 import me.thehutch.cubiverse.universe.solarsystem.stars.Star;
-import org.spout.api.component.type.WorldComponent;
+import org.spout.api.component.world.WorldComponent;
 import org.spout.api.map.DefaultedKey;
 import org.spout.api.map.DefaultedKeyImpl;
 import org.spout.api.math.Vector3;
@@ -26,7 +26,7 @@ public final class SolarSystem extends WorldComponent {
 	}
 
 	public Star getStar() {
-		return getData().get(SOLAR_SYSTEM_STAR);
+		return getDatatable().get(SOLAR_SYSTEM_STAR);
 	}
 
 	public Planet getPlanetAt(Vector3 pos) {
@@ -34,7 +34,7 @@ public final class SolarSystem extends WorldComponent {
 	}
 
 	public THashMap<Vector3, Planet> getPlanets() {
-		return getData().get(SOLAR_SYSTEM_PLANETS);
+		return getDatatable().get(SOLAR_SYSTEM_PLANETS);
 	}
 
 	public Set<Vector3> getPlanetLocations() {

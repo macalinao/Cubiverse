@@ -1,6 +1,6 @@
 package me.thehutch.cubiverse.materials;
 
-import org.spout.api.component.type.BlockComponent;
+import org.spout.api.component.block.BlockComponent;
 import org.spout.api.material.BlockMaterial;
 
 /**

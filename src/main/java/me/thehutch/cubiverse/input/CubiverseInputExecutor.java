@@ -1,6 +1,6 @@
 package me.thehutch.cubiverse.input;
 
-import org.spout.api.component.impl.SceneComponent;
+import org.spout.api.component.entity.SceneComponent;
 import org.spout.api.entity.Player;
 import org.spout.api.entity.state.PlayerInputState;
 import org.spout.api.geo.discrete.Transform;
