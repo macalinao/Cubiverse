@@ -1,6 +1,6 @@
 package me.thehutch.cubiverse.universe.solarsystem.planets;
 
-import me.thehutch.cubiverse.data.Climate;
+import me.thehutch.cubiverse.data.Atmosphere;
 import me.thehutch.cubiverse.universe.SpaceObject;
 import org.spout.api.math.Vector3;
 
@@ -11,21 +11,16 @@ public final class Planet extends SpaceObject {
 
 	//Defaults
 	public static final int DEFAULT_ROTATION_TIME = 24000;
-	public static final Climate DEFAULT_CLIMATE = Climate.NORMAL;
 	//Planet Data
 	private final double distanceToStar;
 	private final int rotationTime;
-	private final Climate climate;
+	private final Atmosphere atmosphere;
 
-	public Planet(String name, Vector3 location, int radius, double distanceToStar) {
-		this(name, location, radius, distanceToStar, DEFAULT_ROTATION_TIME);
-	}
-
-	public Planet(String name, Vector3 location, int radius, double distanceToStar, int rotationTime) {
+	public Planet(String name, Vector3 location, int radius, double distanceToStar, int rotationTime, Atmosphere atmosphere) {
 		super(name, location, radius);
 		this.distanceToStar = distanceToStar;
 		this.rotationTime = rotationTime;
-		this.climate = Climate.getClimateFromPlanetDistance(distanceToStar);
+		this.atmosphere = atmosphere;
 	}
 
 	public double getDistanceToStar() {
@@ -36,17 +31,17 @@ public final class Planet extends SpaceObject {
 		return rotationTime;
 	}
 
-	public Climate getClimate() {
-		return climate;
+	public Atmosphere getAtmosphere() {
+		return atmosphere;
 	}
 
 	@Override
 	public void onTick(float dt) {
-		
+		//TODO
 	}
 
 	@Override
 	public String toString() {
-		return String.format("Name: %s | Radius: %s | Climate: %s | Rotation Time: %s", getName(), getRadius(), getClimate().name(), getRotationTime());
+		return String.format("Name: %s | Radius: %s | Climate: %s | Rotation Time: %s", getName(), getRadius(), getAtmosphere(), getRotationTime());
 	}
 }
